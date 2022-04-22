@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 3.5)
 set(PROJECT_NAME as2_motion_command_handlers)
 project(${PROJECT_NAME})
 
+set( CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -Wall -fPIC" )
 
 # Default to C++14
 if(NOT CMAKE_CXX_STANDARD)
