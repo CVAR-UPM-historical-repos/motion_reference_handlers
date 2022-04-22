@@ -20,6 +20,7 @@ set(PROJECT_DEPENDENCIES
   as2_core
   as2_msgs
   std_srvs
+  trajectory_msgs
 )
 
 foreach(DEPENDENCY ${PROJECT_DEPENDENCIES})
