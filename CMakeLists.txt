@@ -14,7 +14,6 @@ set(PROJECT_DEPENDENCIES
   rclcpp
   rclcpp_action
   std_msgs
-  sensor_msgs
   geometry_msgs
   nav_msgs
   as2_core
@@ -84,4 +83,3 @@ install(
 )
 
 ament_package()
-

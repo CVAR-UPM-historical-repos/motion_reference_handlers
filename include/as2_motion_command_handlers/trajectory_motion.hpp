@@ -2,14 +2,14 @@
 #define TRAJECTORY_MOTION_COMMANDS_HPP
 
 #include <functional>
-#include <geometry_msgs/msg/twist_stamped.hpp>
-#include <geometry_msgs/msg/pose_stamped.hpp>
 #include <memory>
 #include <thread>
 
 #include "as2_core/node.hpp"
 #include "basic_motion_commands.hpp"
-#include "tf2_geometry_msgs/tf2_geometry_msgs.h"
+
+#include <geometry_msgs/msg/twist_stamped.hpp>
+#include <geometry_msgs/msg/pose_stamped.hpp>
 
 namespace as2
 {
@@ -19,7 +19,9 @@ namespace as2
     {
     public:
       TrajectoryMotion(as2::Node *node_ptr);
+      ~TrajectoryMotion(){};
 
+    public:
       bool sendTrajectoryCommandWithYawAngle(
           const float &x, const float &y, const float &z, const float &yaw_angle,
           const float &vx, const float &vy, const float &vz,
@@ -29,10 +31,6 @@ namespace as2
           const float &x, const float &y, const float &z,
           const float &vx, const float &vy, const float &vz, const float &yaw_speed,
           const float &ax, const float &ay, const float &az);
-
-    private:
-      as2_msgs::msg::ControllerControlMode ownSetControlMode();
-      as2_msgs::msg::ControllerControlMode current_mode_;
     };
 
   } // namespace motionCommandsHandlers

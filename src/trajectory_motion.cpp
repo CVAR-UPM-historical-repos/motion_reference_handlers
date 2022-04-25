@@ -5,14 +5,19 @@ namespace as2
 {
     namespace motionCommandsHandlers
     {
-        TrajectoryMotion::TrajectoryMotion(as2::Node *node_ptr) : BasicMotionCommandsHandler(node_ptr){};
+        TrajectoryMotion::TrajectoryMotion(as2::Node *node_ptr) : BasicMotionCommandsHandler(node_ptr)
+        {
+            desired_control_mode_.yaw_mode = as2_msgs::msg::ControlMode::NONE;
+            desired_control_mode_.control_mode = as2_msgs::msg::ControlMode::TRAJECTORY;
+            desired_control_mode_.reference_frame = as2_msgs::msg::ControlMode::LOCAL_ENU_FRAME;
+        };
 
         bool TrajectoryMotion::sendTrajectoryCommandWithYawAngle(
             const float &x, const float &y, const float &z, const float &yaw_angle,
             const float &vx, const float &vy, const float &vz,
             const float &ax, const float &ay, const float &az)
         {
-            current_mode_.yaw_mode = as2_msgs::msg::ControllerControlMode::YAW_ANGLE;
+            desired_control_mode_.yaw_mode = as2_msgs::msg::ControlMode::YAW_ANGLE;
             /*
             Matrix:
             | x_ref_x   | v_ref_x   | a_ref_x   |
@@ -44,7 +49,7 @@ namespace as2
             const float &vx, const float &vy, const float &vz, const float &yaw_speed,
             const float &ax, const float &ay, const float &az)
         {
-            current_mode_.yaw_mode = as2_msgs::msg::ControllerControlMode::YAW_ANGLE;
+            desired_control_mode_.yaw_mode = as2_msgs::msg::ControlMode::YAW_SPEED;
             /*
             Matrix:
             | x_ref_x   | v_ref_x   | a_ref_x   |
@@ -70,22 +75,5 @@ namespace as2
 
             return this->sendCommand();
         };
-
-        as2_msgs::msg::ControllerControlMode TrajectoryMotion::ownSetControlMode()
-        {
-            as2_msgs::msg::ControllerControlMode control_mode_msg;
-
-            control_mode_msg.control_mode = as2_msgs::msg::ControllerControlMode::TRAJECTORY_MODE;
-            if (current_mode_.yaw_mode == as2_msgs::msg::ControllerControlMode::YAW_ANGLE)
-            {
-                control_mode_msg.yaw_mode = as2_msgs::msg::ControllerControlMode::YAW_ANGLE;
-            }
-            else
-            {
-                control_mode_msg.yaw_mode = as2_msgs::msg::ControllerControlMode::YAW_SPEED;
-            }
-            return control_mode_msg;
-        };
-
     } // namespace motionCommandsHandlers
 } // namespace as2
