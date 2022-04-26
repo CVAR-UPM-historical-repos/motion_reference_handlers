@@ -123,7 +123,9 @@ namespace as2
 
         bool BasicMotionCommandsHandler::setMode(const as2_msgs::msg::ControlMode &mode)
         {
-
+            // TODO
+            RCLCPP_WARN_ONCE(node_ptr_->get_logger(), "TRUE BY DEFAULT");
+            return true;
             RCLCPP_INFO(node_ptr_->get_logger(), "Setting control mode to %d", mode.control_mode);
 
             // Set request
