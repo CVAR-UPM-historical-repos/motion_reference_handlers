@@ -30,7 +30,7 @@ namespace as2
 
                 // Service client
                 set_mode_client_ = node_ptr_->create_client<as2_msgs::srv::SetControllerControlMode>(
-                    node_ptr_->generate_global_name(as2_names::services::motion_reference::setcontrolmode));
+                    node_ptr_->generate_global_name(as2_names::services::controller::set_control_mode));
 
                 // Set initial control mode
                 desired_control_mode_.yaw_mode = as2_msgs::msg::ControlMode::NONE;
