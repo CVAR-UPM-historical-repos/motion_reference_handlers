@@ -16,7 +16,6 @@
 #include <geometry_msgs/msg/twist_stamped.hpp>
 #include <geometry_msgs/msg/pose_stamped.hpp>
 #include <trajectory_msgs/msg/joint_trajectory_point.hpp>
-#include "as2_msgs/msg/thrust.hpp"
 
 #include "rclcpp/rclcpp.hpp"
 
@@ -38,7 +37,6 @@ namespace as2
             trajectory_msgs::msg::JointTrajectoryPoint command_trajectory_msg_;
             geometry_msgs::msg::PoseStamped command_pose_msg_;
             geometry_msgs::msg::TwistStamped command_twist_msg_;
-            as2_msgs::msg::Thrust command_thrust_msg_;
 
             as2_msgs::msg::ControlMode desired_control_mode_;
 
@@ -55,7 +53,6 @@ namespace as2
             rclcpp::Publisher<trajectory_msgs::msg::JointTrajectoryPoint>::SharedPtr command_traj_pub_;
             rclcpp::Publisher<geometry_msgs::msg::PoseStamped>::SharedPtr command_pose_pub_;
             rclcpp::Publisher<geometry_msgs::msg::TwistStamped>::SharedPtr command_twist_pub_;
-            rclcpp::Publisher<as2_msgs::msg::Thrust>::SharedPtr command_thrust_pub_;
 
             bool setMode(const as2_msgs::msg::ControlMode &mode);
             void publishCommands();

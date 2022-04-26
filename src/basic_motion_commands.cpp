@@ -20,9 +20,6 @@ namespace as2
                 command_twist_pub_ = node_ptr_->create_publisher<geometry_msgs::msg::TwistStamped>(
                     as2_names::topics::motion_reference::twist, as2_names::topics::motion_reference::qos);
 
-                command_thrust_pub_ = node_ptr_->create_publisher<as2_msgs::msg::Thrust>(
-                    as2_names::topics::motion_reference::thrust, as2_names::topics::motion_reference::qos);
-
                 // Subscriber
                 controller_info_sub_ = node_ptr_->create_subscription<as2_msgs::msg::ControllerInfo>(
                     as2_names::topics::motion_reference::info, as2_names::topics::motion_reference::qos_info,
@@ -85,7 +82,6 @@ namespace as2
             command_traj_pub_->publish(command_trajectory_msg_);
             command_pose_pub_->publish(command_pose_msg_);
             command_twist_pub_->publish(command_twist_msg_);
-            command_thrust_pub_->publish(command_thrust_msg_);
 
             // Send just necessary messages
             // switch (current_mode_.control_mode)
