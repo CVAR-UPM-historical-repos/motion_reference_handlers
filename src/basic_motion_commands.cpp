@@ -25,11 +25,11 @@ namespace as2
                     as2_names::topics::motion_reference::info, as2_names::topics::motion_reference::qos_info,
                     [](const as2_msgs::msg::ControllerInfo::SharedPtr msg)
                     {
-                        BasicMotionCommandsHandler::current_mode_ = msg->current_control_mode;
+                        current_mode_ = msg->current_control_mode;
                     });
 
                 // Service client
-                set_mode_client_ = node_ptr_->create_client<as2_msgs::srv::SetControllerControlMode>(
+                set_mode_client_ = node_ptr_->create_client<as2_msgs::srv::SetControlMode>(
                     node_ptr_->generate_global_name(as2_names::services::controller::set_control_mode));
 
                 // Set initial control mode
@@ -129,7 +129,7 @@ namespace as2
             RCLCPP_INFO(node_ptr_->get_logger(), "Setting control mode to %d", mode.control_mode);
 
             // Set request
-            auto request = std::make_shared<as2_msgs::srv::SetControllerControlMode::Request>();
+            auto request = std::make_shared<as2_msgs::srv::SetControlMode::Request>();
             request->control_mode = mode;
 
             // Wait for service to be available
@@ -162,14 +162,14 @@ namespace as2
 
         int BasicMotionCommandsHandler::number_of_instances_ = 0;
 
-        rclcpp::Client<as2_msgs::srv::SetControllerControlMode>::SharedPtr
+        rclcpp::Client<as2_msgs::srv::SetControlMode>::SharedPtr
             BasicMotionCommandsHandler::set_mode_client_ = nullptr;
 
         rclcpp::Subscription<as2_msgs::msg::ControllerInfo>::SharedPtr
             BasicMotionCommandsHandler::controller_info_sub_ = nullptr;
 
-        as2_msgs::msg::ControlMode BasicMotionCommandsHandler::current_mode_ =
-            as2_msgs::msg::ControlMode();
+        // as2_msgs::msg::ControlMode BasicMotionCommandsHandler::current_mode_ =
+        //     as2_msgs::msg::ControlMode();
 
     } // namespace motionCommandsHandlers
 } // namespace as2
