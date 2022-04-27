@@ -168,8 +168,8 @@ namespace as2
         rclcpp::Subscription<as2_msgs::msg::ControllerInfo>::SharedPtr
             BasicMotionCommandsHandler::controller_info_sub_ = nullptr;
 
-        // as2_msgs::msg::ControlMode BasicMotionCommandsHandler::current_mode_ =
-        //     as2_msgs::msg::ControlMode();
+        as2_msgs::msg::ControlMode BasicMotionCommandsHandler::current_mode_ =
+            as2_msgs::msg::ControlMode();
 
     } // namespace motionCommandsHandlers
 } // namespace as2
