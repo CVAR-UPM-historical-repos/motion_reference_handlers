@@ -27,11 +27,7 @@ namespace as2
                     {
                         current_mode_ = msg->current_control_mode;
                     });
-
-                // Service client
-                set_mode_client_ = node_ptr_->create_client<as2_msgs::srv::SetControlMode>(
-                    node_ptr_->generate_global_name(as2_names::services::controller::set_control_mode));
-
+                
                 // Set initial control mode
                 desired_control_mode_.yaw_mode = as2_msgs::msg::ControlMode::NONE;
                 desired_control_mode_.control_mode = as2_msgs::msg::ControlMode::UNSET;
@@ -50,7 +46,6 @@ namespace as2
             if (number_of_instances_ == 0 && node_ptr_ != nullptr)
             {
                 RCLCPP_INFO(node_ptr_->get_logger(), "Deleting node_ptr_");
-                set_mode_client_.reset();
                 controller_info_sub_.reset();
             }
         };
@@ -69,6 +64,7 @@ namespace as2
                     RCLCPP_ERROR(node_ptr_->get_logger(), "Cannot set control mode");
                     return false;
                 }
+                this->current_mode_ = desired_control_mode_;  // FIXME --> read from controller/info which is not implemented yet on ControllerManager
             }
 
             publishCommands();
@@ -123,47 +119,24 @@ namespace as2
 
         bool BasicMotionCommandsHandler::setMode(const as2_msgs::msg::ControlMode &mode)
         {
-            // TODO
-            RCLCPP_WARN_ONCE(node_ptr_->get_logger(), "TRUE BY DEFAULT");
-            return true;
             RCLCPP_INFO(node_ptr_->get_logger(), "Setting control mode to %d", mode.control_mode);
 
             // Set request
-            auto request = std::make_shared<as2_msgs::srv::SetControlMode::Request>();
-            request->control_mode = mode;
+            auto request = as2_msgs::srv::SetControlMode::Request();
+            request.control_mode = mode;
 
-            // Wait for service to be available
-            while (!set_mode_client_->wait_for_service(std::chrono::seconds(1)))
-            {
-                if (!rclcpp::ok())
-                {
-                    RCLCPP_ERROR(node_ptr_->get_logger(), "Interrupted while waiting for the service. Exiting.");
-                    return false;
-                }
-                RCLCPP_INFO(node_ptr_->get_logger(), "service not available, waiting again...");
+            auto set_mode_cli = as2::SynchronousServiceClient<as2_msgs::srv::SetControlMode>(as2_names::services::controller::set_control_mode);
+            auto resp = set_mode_cli.sendRequest(request);
+
+            if (!resp.success) {
+                RCLCPP_ERROR(node_ptr_->get_logger(),
+                                " Controller Control Mode was not able to be settled sucessfully");
+                return false;
             }
-
-            // Send async request
-            auto result = set_mode_client_->async_send_request(request);
-
-            if (rclcpp::spin_until_future_complete(node_ptr_->get_node_base_interface(), result,
-                                                   std::chrono::seconds(1)) ==
-                rclcpp::FutureReturnCode::SUCCESS)
-            {
-                RCLCPP_INFO(node_ptr_->get_logger(), "Controller Control Mode changed sucessfully");
-                current_mode_ = mode;
-                return true;
-            }
-
-            RCLCPP_ERROR(node_ptr_->get_logger(),
-                            " Controller Control Mode was not able to be settled sucessfully");
-            return false;
+            return true;
         };
 
         int BasicMotionCommandsHandler::number_of_instances_ = 0;
-
-        rclcpp::Client<as2_msgs::srv::SetControlMode>::SharedPtr
-            BasicMotionCommandsHandler::set_mode_client_ = nullptr;
 
         rclcpp::Subscription<as2_msgs::msg::ControllerInfo>::SharedPtr
             BasicMotionCommandsHandler::controller_info_sub_ = nullptr;

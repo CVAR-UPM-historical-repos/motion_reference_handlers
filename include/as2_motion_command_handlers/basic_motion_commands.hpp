@@ -8,7 +8,7 @@
 #include "as2_core/node.hpp"
 #include "as2_core/names/topics.hpp"
 #include "as2_core/names/services.hpp"
-
+#include "as2_core/synchronous_service_client.hpp"
 #include "as2_msgs/srv/set_control_mode.hpp"
 #include <as2_msgs/msg/controller_info.hpp>
 #include <as2_msgs/msg/control_mode.hpp>
@@ -46,7 +46,6 @@ namespace as2
 
             static int number_of_instances_;
 
-            static rclcpp::Client<as2_msgs::srv::SetControlMode>::SharedPtr set_mode_client_;
             static rclcpp::Subscription<as2_msgs::msg::ControllerInfo>::SharedPtr controller_info_sub_;
             static as2_msgs::msg::ControlMode current_mode_;
 
