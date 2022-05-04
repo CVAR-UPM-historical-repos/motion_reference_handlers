@@ -52,7 +52,6 @@ namespace as2
 
         bool BasicMotionCommandsHandler::sendCommand()
         {
-
             // TODO: Check comparation
             // if (this->current_mode_ != desired_control_mode_)
             if (this->current_mode_.yaw_mode != desired_control_mode_.yaw_mode ||
@@ -64,7 +63,6 @@ namespace as2
                     RCLCPP_ERROR(node_ptr_->get_logger(), "Cannot set control mode");
                     return false;
                 }
-                this->current_mode_ = desired_control_mode_;  // FIXME --> read from controller/info which is not implemented yet on ControllerManager
             }
 
             publishCommands();
