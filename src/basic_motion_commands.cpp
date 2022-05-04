@@ -22,7 +22,7 @@ namespace as2
 
                 // Subscriber
                 controller_info_sub_ = node_ptr_->create_subscription<as2_msgs::msg::ControllerInfo>(
-                    as2_names::topics::motion_reference::info, as2_names::topics::motion_reference::qos_info,
+                    as2_names::topics::controller::info, as2_names::topics::controller::qos_info,
                     [](const as2_msgs::msg::ControllerInfo::SharedPtr msg)
                     {
                         current_mode_ = msg->current_control_mode;
