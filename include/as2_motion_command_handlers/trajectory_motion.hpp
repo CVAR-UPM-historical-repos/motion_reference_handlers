@@ -4,6 +4,7 @@
 #include <functional>
 #include <memory>
 #include <thread>
+#include <vector>
 
 #include "as2_core/node.hpp"
 #include "basic_motion_commands.hpp"
@@ -27,10 +28,20 @@ namespace as2
           const float &vx, const float &vy, const float &vz,
           const float &ax, const float &ay, const float &az);
 
+      bool sendTrajectoryCommandWithYawAngle(
+          const std::vector<double> &positions,
+          const std::vector<double> &velocities,
+          const std::vector<double> &accelerations);
+
       bool sendTrajectoryCommandWithYawSpeed(
           const float &x, const float &y, const float &z,
           const float &vx, const float &vy, const float &vz, const float &yaw_speed,
           const float &ax, const float &ay, const float &az);
+      
+      bool sendTrajectoryCommandWithYawSpeed(
+          const std::vector<double> &positions,
+          const std::vector<double> &velocities,
+          const std::vector<double> &accelerations);
     };
 
   } // namespace motionCommandsHandlers
