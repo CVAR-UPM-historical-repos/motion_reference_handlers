@@ -131,6 +131,7 @@ namespace as2
                                 " Controller Control Mode was not able to be settled sucessfully");
                 return false;
             }
+            this->current_mode_ = mode;
             return true;
         };
 
