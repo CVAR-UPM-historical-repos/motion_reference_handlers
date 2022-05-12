@@ -121,12 +121,13 @@ namespace as2
 
             // Set request
             auto request = as2_msgs::srv::SetControlMode::Request();
+            auto response = as2_msgs::srv::SetControlMode::Response();
             request.control_mode = mode;
 
             auto set_mode_cli = as2::SynchronousServiceClient<as2_msgs::srv::SetControlMode>(as2_names::services::controller::set_control_mode);
-            auto resp = set_mode_cli.sendRequest(request);
+            bool out = set_mode_cli.sendRequest(request, response);
 
-            if (!resp.success) {
+            if (out && !response.success) {
                 RCLCPP_ERROR(node_ptr_->get_logger(),
                                 " Controller Control Mode was not able to be settled sucessfully");
                 return false;
