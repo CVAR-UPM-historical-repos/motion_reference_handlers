@@ -1,11 +1,11 @@
 
-#include "as2_motion_command_handlers/trajectory_motion.hpp"
+#include "motion_reference_handlers/trajectory_motion.hpp"
 
 namespace as2
 {
-    namespace motionCommandsHandlers
+    namespace motionReferenceHandlers
     {
-        TrajectoryMotion::TrajectoryMotion(as2::Node *node_ptr) : BasicMotionCommandsHandler(node_ptr)
+        TrajectoryMotion::TrajectoryMotion(as2::Node *node_ptr) : BasicMotionReferenceHandler(node_ptr)
         {
             desired_control_mode_.yaw_mode = as2_msgs::msg::ControlMode::NONE;
             desired_control_mode_.control_mode = as2_msgs::msg::ControlMode::TRAJECTORY;
@@ -99,5 +99,5 @@ namespace as2
                                                            velocities[0], velocities[1], velocities[2], velocities[3],
                                                            accelerations[0], accelerations[1], accelerations[2]);
         }
-    } // namespace motionCommandsHandlers
+    } // namespace motionReferenceHandlers
 } // namespace as2

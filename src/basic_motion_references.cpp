@@ -1,10 +1,10 @@
-#include "as2_motion_command_handlers/basic_motion_commands.hpp"
+#include "motion_reference_handlers/basic_motion_references.hpp"
 
 #include <as2_core/names/topics.hpp>
 
 namespace as2 {
-namespace motionCommandsHandlers {
-BasicMotionCommandsHandler::BasicMotionCommandsHandler(as2::Node *as2_ptr) : node_ptr_(as2_ptr) {
+namespace motionReferenceHandlers {
+BasicMotionReferenceHandler::BasicMotionReferenceHandler(as2::Node *as2_ptr) : node_ptr_(as2_ptr) {
   if (number_of_instances_ == 0) {
     // Publisher
     command_traj_pub_ = node_ptr_->create_publisher<trajectory_msgs::msg::JointTrajectoryPoint>(
@@ -30,19 +30,19 @@ BasicMotionCommandsHandler::BasicMotionCommandsHandler(as2::Node *as2_ptr) : nod
   }
 
   number_of_instances_++;
-  RCLCPP_INFO(node_ptr_->get_logger(),
-              "There are %d instances of BasicMotionCommandsHandler created", number_of_instances_);
+  RCLCPP_DEBUG(node_ptr_->get_logger(),
+              "There are %d instances of BasicMotionReferenceHandler created", number_of_instances_);
 };
 
-BasicMotionCommandsHandler::~BasicMotionCommandsHandler() {
+BasicMotionReferenceHandler::~BasicMotionReferenceHandler() {
   number_of_instances_--;
   if (number_of_instances_ == 0 && node_ptr_ != nullptr) {
-    RCLCPP_INFO(node_ptr_->get_logger(), "Deleting node_ptr_");
+    RCLCPP_DEBUG(node_ptr_->get_logger(), "Deleting node_ptr_");
     controller_info_sub_.reset();
   }
 };
 
-bool BasicMotionCommandsHandler::sendCommand() {
+bool BasicMotionReferenceHandler::sendCommand() {
   // TODO: Check comparation
   // if (this->current_mode_ != desired_control_mode_)
   if (this->current_mode_.yaw_mode != desired_control_mode_.yaw_mode ||
@@ -58,52 +58,15 @@ bool BasicMotionCommandsHandler::sendCommand() {
   return true;
 };
 
-void BasicMotionCommandsHandler::publishCommands() {
+void BasicMotionReferenceHandler::publishCommands() {
   rclcpp::Time stamp = node_ptr_->now();
 
   command_traj_pub_->publish(command_trajectory_msg_);
   command_pose_pub_->publish(command_pose_msg_);
   command_twist_pub_->publish(command_twist_msg_);
-
-  // Send just necessary messages
-  // switch (current_mode_.control_mode)
-  // {
-  // case as2_msgs::msg::ControllerControlMode::HOVER_MODE:
-  //     /* TODO */
-  //     break;
-  // case as2_msgs::msg::ControllerControlMode::TRAJECTORY_MODE:
-  //     command_traj_pub_->publish(command_trajectory_msg_);
-  //     break;
-  // case as2_msgs::msg::ControllerControlMode::SPEED_MODE:
-  //     command_twist_msg_.header.stamp = stamp;
-  //     command_twist_msg_.header.frame_id = "odom";
-  //     command_twist_pub_->publish(command_twist_msg_);
-  //     break;
-  // case as2_msgs::msg::ControllerControlMode::UNSET:
-  //     // TODO
-  //     break;
-  // default:
-  //     RCLCPP_WARN_ONCE(node_ptr_->get_logger(), "Unknown control mode");
-  //     break;
-  // }
-  // switch (current_mode_.yaw_mode)
-  // {
-  // case as2_msgs::msg::ControllerControlMode::YAW_ANGLE:
-  //     // TODO
-  //     break;
-  // case as2_msgs::msg::ControllerControlMode::YAW_SPEED:
-  //     // TODO
-  //     break;
-  // case as2_msgs::msg::ControllerControlMode::NONE:
-  //     // TODO
-  //     break;
-  // default:
-  //     RCLCPP_WARN_ONCE(node_ptr_->get_logger(), "Unknown yaw control mode");
-  //     break;
-  // }
 }
 
-bool BasicMotionCommandsHandler::setMode(const as2_msgs::msg::ControlMode &mode) {
+bool BasicMotionReferenceHandler::setMode(const as2_msgs::msg::ControlMode &mode) {
   RCLCPP_INFO(node_ptr_->get_logger(), "Setting control mode to %d", mode.control_mode);
 
   // Set request
@@ -124,12 +87,12 @@ bool BasicMotionCommandsHandler::setMode(const as2_msgs::msg::ControlMode &mode)
   return false;
 };
 
-int BasicMotionCommandsHandler::number_of_instances_ = 0;
+int BasicMotionReferenceHandler::number_of_instances_ = 0;
 
 rclcpp::Subscription<as2_msgs::msg::ControllerInfo>::SharedPtr
-    BasicMotionCommandsHandler::controller_info_sub_ = nullptr;
+    BasicMotionReferenceHandler::controller_info_sub_ = nullptr;
 
-as2_msgs::msg::ControlMode BasicMotionCommandsHandler::current_mode_ = as2_msgs::msg::ControlMode();
+as2_msgs::msg::ControlMode BasicMotionReferenceHandler::current_mode_ = as2_msgs::msg::ControlMode();
 
-}  // namespace motionCommandsHandlers
+}  // namespace motionReferenceHandlers
 }  // namespace as2

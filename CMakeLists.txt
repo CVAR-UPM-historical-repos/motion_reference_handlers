@@ -1,13 +1,19 @@
 cmake_minimum_required(VERSION 3.5)
-set(PROJECT_NAME as2_motion_command_handlers)
-project(${PROJECT_NAME})
+set(PROJECT_NAME motion_reference_handlers) 
+project(${PROJECT_NAME} VERSION 0.1.0)
 
-set( CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -Wall -fPIC" )
-
-# Default to C++14
+# Default to C++17
 if(NOT CMAKE_CXX_STANDARD)
-  set(CMAKE_CXX_STANDARD 14)
+  set(CMAKE_CXX_STANDARD 17)
 endif()
+
+# set Release as default
+if (NOT CMAKE_BUILD_TYPE)
+  set(CMAKE_BUILD_TYPE Release)
+endif()
+
+#set fPIC to ON by default
+set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
 set(PROJECT_DEPENDENCIES
   ament_cmake
@@ -36,7 +42,7 @@ include_directories(
 )
 
 set(SOURCE_CPP_FILES 
-  src/basic_motion_commands.cpp
+  src/basic_motion_references.cpp
   src/trajectory_motion.cpp
   src/speed_motion.cpp
   )

@@ -1,11 +1,11 @@
 
-#include "as2_motion_command_handlers/speed_motion.hpp"
+#include "motion_reference_handlers/speed_motion.hpp"
 
 namespace as2
 {
-    namespace motionCommandsHandlers
+    namespace motionReferenceHandlers
     {
-        SpeedMotion::SpeedMotion(as2::Node *node_ptr) : BasicMotionCommandsHandler(node_ptr)
+        SpeedMotion::SpeedMotion(as2::Node *node_ptr) : BasicMotionReferenceHandler(node_ptr)
         {
             desired_control_mode_.yaw_mode = as2_msgs::msg::ControlMode::NONE;
             desired_control_mode_.control_mode = as2_msgs::msg::ControlMode::SPEED;
@@ -42,5 +42,5 @@ namespace as2
 
             return this->sendCommand();
         };
-    } // namespace motionCommandsHandlers
+    } // namespace motionReferenceHandlers
 } // namespace as2

@@ -7,16 +7,16 @@
 #include <vector>
 
 #include "as2_core/node.hpp"
-#include "basic_motion_commands.hpp"
+#include "basic_motion_references.hpp"
 
 #include <geometry_msgs/msg/twist_stamped.hpp>
 #include <geometry_msgs/msg/pose_stamped.hpp>
 
 namespace as2
 {
-  namespace motionCommandsHandlers
+  namespace motionReferenceHandlers
   {
-    class TrajectoryMotion : public as2::motionCommandsHandlers::BasicMotionCommandsHandler
+    class TrajectoryMotion : public as2::motionReferenceHandlers::BasicMotionReferenceHandler
     {
     public:
       TrajectoryMotion(as2::Node *node_ptr);
@@ -44,7 +44,7 @@ namespace as2
           const std::vector<double> &accelerations);
     };
 
-  } // namespace motionCommandsHandlers
+  } // namespace motionReferenceHandlers
 } // namespace as2
 
 #endif // TRAJECTORY_MOTION_COMMANDS_HPP

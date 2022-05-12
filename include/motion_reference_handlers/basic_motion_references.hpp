@@ -19,17 +19,16 @@
 
 #include "rclcpp/rclcpp.hpp"
 
-#define AUX_NODE_SPIN_RATE 10
 
 namespace as2
 {
-    namespace motionCommandsHandlers
+    namespace motionReferenceHandlers
     {
-        class BasicMotionCommandsHandler
+        class BasicMotionReferenceHandler
         {
         public:
-            BasicMotionCommandsHandler(as2::Node *as2_ptr);
-            ~BasicMotionCommandsHandler();
+            BasicMotionReferenceHandler(as2::Node *as2_ptr);
+            ~BasicMotionReferenceHandler();
 
         protected:
             as2::Node *node_ptr_;

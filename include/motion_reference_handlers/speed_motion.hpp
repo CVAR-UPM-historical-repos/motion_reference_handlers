@@ -6,7 +6,7 @@
 #include <thread>
 
 #include "as2_core/node.hpp"
-#include "basic_motion_commands.hpp"
+#include "basic_motion_references.hpp"
 #include "tf2_geometry_msgs/tf2_geometry_msgs.h"
 
 #include <geometry_msgs/msg/twist_stamped.hpp>
@@ -14,9 +14,9 @@
 
 namespace as2
 {
-  namespace motionCommandsHandlers
+  namespace motionReferenceHandlers
   {
-    class SpeedMotion : public as2::motionCommandsHandlers::BasicMotionCommandsHandler
+    class SpeedMotion : public as2::motionReferenceHandlers::BasicMotionReferenceHandler
     {
     public:
       SpeedMotion(as2::Node *node_ptr);
@@ -31,7 +31,7 @@ namespace as2
           const float &vx, const float &vy, const float &vz, const float &yaw_speed);
     };
 
-  } // namespace motionCommandsHandlers
+  } // namespace motionReferenceHandlers
 } // namespace as2
 
 #endif // SPEED_MOTION_COMMANDS_HPP
