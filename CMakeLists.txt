@@ -41,6 +41,7 @@ include_directories(
 set(SOURCE_CPP_FILES 
   src/basic_motion_references.cpp
   src/trajectory_motion.cpp
+  src/position_motion.cpp
   src/speed_motion.cpp
   )
 
