@@ -58,7 +58,7 @@ namespace as2
 
         // Subscriber
         controller_info_sub_ = node_ptr_->create_subscription<as2_msgs::msg::ControllerInfo>(
-            as2_names::topics::controller::info, as2_names::topics::controller::qos_info,
+            as2_names::topics::controller::info, rclcpp::QoS(1),
             [](const as2_msgs::msg::ControllerInfo::SharedPtr msg)
             {
               current_mode_ = msg->current_control_mode;
@@ -114,7 +114,7 @@ namespace as2
 
     bool BasicMotionReferenceHandler::setMode(const as2_msgs::msg::ControlMode &mode)
     {
-      RCLCPP_INFO(node_ptr_->get_logger(), "Setting control mode to [%s]", as2::controlModeToString(mode.control_mode).c_str());
+      RCLCPP_INFO(node_ptr_->get_logger(), "Setting control mode to [%s]", as2::controlModeToString(mode).c_str());
 
       // Set request
       auto request = as2_msgs::srv::SetControlMode::Request();
