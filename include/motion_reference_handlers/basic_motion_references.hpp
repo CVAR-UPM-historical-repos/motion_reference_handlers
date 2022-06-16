@@ -83,9 +83,9 @@ namespace as2
             static rclcpp::Subscription<as2_msgs::msg::ControllerInfo>::SharedPtr controller_info_sub_;
             static as2_msgs::msg::ControlMode current_mode_;
 
-            rclcpp::Publisher<trajectory_msgs::msg::JointTrajectoryPoint>::SharedPtr command_traj_pub_;
-            rclcpp::Publisher<geometry_msgs::msg::PoseStamped>::SharedPtr command_pose_pub_;
-            rclcpp::Publisher<geometry_msgs::msg::TwistStamped>::SharedPtr command_twist_pub_;
+            static rclcpp::Publisher<trajectory_msgs::msg::JointTrajectoryPoint>::SharedPtr command_traj_pub_;
+            static rclcpp::Publisher<geometry_msgs::msg::PoseStamped>::SharedPtr command_pose_pub_;
+            static rclcpp::Publisher<geometry_msgs::msg::TwistStamped>::SharedPtr command_twist_pub_;
 
             bool setMode(const as2_msgs::msg::ControlMode &mode);
             void publishCommands();

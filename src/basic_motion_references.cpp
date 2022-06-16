@@ -82,6 +82,9 @@ namespace as2
       {
         RCLCPP_DEBUG(node_ptr_->get_logger(), "Deleting node_ptr_");
         controller_info_sub_.reset();
+        command_traj_pub_.reset();
+        command_pose_pub_.reset();
+        command_twist_pub_.reset();
       }
     };
 
@@ -98,7 +101,6 @@ namespace as2
           return false;
         }
       }
-
       publishCommands();
       return true;
     };
@@ -106,7 +108,6 @@ namespace as2
     void BasicMotionReferenceHandler::publishCommands()
     {
       rclcpp::Time stamp = node_ptr_->now();
-
       command_traj_pub_->publish(command_trajectory_msg_);
       command_pose_pub_->publish(command_pose_msg_);
       command_twist_pub_->publish(command_twist_msg_);
@@ -123,6 +124,7 @@ namespace as2
 
       auto set_mode_cli = as2::SynchronousServiceClient<as2_msgs::srv::SetControlMode>(
           as2_names::services::controller::set_control_mode);
+
       bool out = set_mode_cli.sendRequest(request, response);
 
       if (out && response.success)
@@ -141,6 +143,11 @@ namespace as2
         BasicMotionReferenceHandler::controller_info_sub_ = nullptr;
 
     as2_msgs::msg::ControlMode BasicMotionReferenceHandler::current_mode_ = as2_msgs::msg::ControlMode();
+
+    rclcpp::Publisher<trajectory_msgs::msg::JointTrajectoryPoint>::SharedPtr  BasicMotionReferenceHandler::command_traj_pub_ = nullptr;
+    rclcpp::Publisher<geometry_msgs::msg::PoseStamped>::SharedPtr             BasicMotionReferenceHandler::command_pose_pub_ = nullptr;
+    rclcpp::Publisher<geometry_msgs::msg::TwistStamped>::SharedPtr            BasicMotionReferenceHandler::command_twist_pub_ = nullptr;
+
 
   } // namespace motionReferenceHandlers
 } // namespace as2
