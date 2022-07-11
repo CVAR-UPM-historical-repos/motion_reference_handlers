@@ -42,6 +42,7 @@
 #include <thread>
 
 #include "as2_core/node.hpp"
+#include <as2_core/tf_utils.hpp>
 #include "basic_motion_references.hpp"
 #include "tf2_geometry_msgs/tf2_geometry_msgs.h"
 
@@ -63,8 +64,11 @@ namespace as2
           const float &vx, const float &vy, const float &vz, const float &yaw_angle);
       bool sendSpeedCommandWithYawAngle(
           const float &vx, const float &vy, const float &vz, const geometry_msgs::msg::Quaternion &q);
+      bool sendSpeedCommandWithYawAngle(
+          const geometry_msgs::msg::PoseStamped &pose, const geometry_msgs::msg::TwistStamped &twist);
       bool sendSpeedCommandWithYawSpeed(
           const float &vx, const float &vy, const float &vz, const float &yaw_speed);
+      bool sendSpeedCommandWithYawSpeed(const geometry_msgs::msg::TwistStamped &twist);
     };
 
   } // namespace motionReferenceHandlers

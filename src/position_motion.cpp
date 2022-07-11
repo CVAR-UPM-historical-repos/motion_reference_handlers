@@ -54,22 +54,34 @@ namespace as2
             return sendPositionCommandWithYawAngle(
                 x, y, z, tf2::toMsg(tf2::Quaternion(tf2::Vector3(0, 0, 1), yaw_angle)),
                 vx, vy, vz);
-        }
+        };
 
         bool PositionMotion::sendPositionCommandWithYawAngle(
             const float &x, const float &y, const float &z, const geometry_msgs::msg::Quaternion &q,
             const float &vx = 0.0f, const float &vy = 0.0f, const float &vz = 0.0f)
         {
+            geometry_msgs::msg::PoseStamped pose_msg;
+            pose_msg.header.frame_id = generateTfName(node_ptr_->get_namespace(), "earth");
+            pose_msg.pose.position.x = x;
+            pose_msg.pose.position.y = y;
+            pose_msg.pose.position.z = z;
+            pose_msg.pose.orientation = q;
+
+            geometry_msgs::msg::TwistStamped twist_msg;
+            twist_msg.header.frame_id = generateTfName(node_ptr_->get_namespace(), "earth");
+            twist_msg.twist.linear.x = vx;
+            twist_msg.twist.linear.y = vy;
+            twist_msg.twist.linear.z = vz;
+
+            return sendPositionCommandWithYawAngle(pose_msg, twist_msg);
+        };
+
+        bool PositionMotion::sendPositionCommandWithYawAngle(
+            const geometry_msgs::msg::PoseStamped &pose, const geometry_msgs::msg::TwistStamped &twist)
+        {
             desired_control_mode_.yaw_mode = as2_msgs::msg::ControlMode::YAW_ANGLE;
-            this->command_pose_msg_.pose.position.x = x;
-            this->command_pose_msg_.pose.position.y = y;
-            this->command_pose_msg_.pose.position.z = z;
-
-            this->command_pose_msg_.pose.orientation = q;
-
-            this->command_twist_msg_.twist.linear.x = vx;
-            this->command_twist_msg_.twist.linear.y = vy;
-            this->command_twist_msg_.twist.linear.z = vz;
+            this->command_pose_msg_ = pose;
+            this->command_twist_msg_ = twist;
 
             return this->sendCommand();
         };
@@ -78,17 +90,28 @@ namespace as2
             const float &x, const float &y, const float &z, const float &yaw_speed,
             const float &vx = 0.0f, const float &vy = 0.0f, const float &vz = 0.0f)
         {
+            geometry_msgs::msg::PoseStamped pose_msg;
+            pose_msg.header.frame_id = generateTfName(node_ptr_->get_namespace(), "earth");
+            pose_msg.pose.position.x = x;
+            pose_msg.pose.position.y = y;
+            pose_msg.pose.position.z = z;
+
+            geometry_msgs::msg::TwistStamped twist_msg;
+            twist_msg.header.frame_id = generateTfName(node_ptr_->get_namespace(), "earth");
+            twist_msg.twist.linear.x = vx;
+            twist_msg.twist.linear.y = vy;
+            twist_msg.twist.linear.z = vz;
+            twist_msg.twist.angular.z = yaw_speed;
+
+            return sendPositionCommandWithYawSpeed(pose_msg, twist_msg);
+        };
+
+        bool PositionMotion::sendPositionCommandWithYawSpeed(
+            const geometry_msgs::msg::PoseStamped &pose, const geometry_msgs::msg::TwistStamped &twist)
+        {
             desired_control_mode_.yaw_mode = as2_msgs::msg::ControlMode::YAW_SPEED;
-
-            this->command_pose_msg_.pose.position.x = x;
-            this->command_pose_msg_.pose.position.y = y;
-            this->command_pose_msg_.pose.position.z = z;
-
-            this->command_twist_msg_.twist.angular.z = yaw_speed;
-
-            this->command_twist_msg_.twist.linear.x = vx;
-            this->command_twist_msg_.twist.linear.y = vy;
-            this->command_twist_msg_.twist.linear.z = vz;
+            this->command_pose_msg_ = pose;
+            this->command_twist_msg_ = twist;
 
             return this->sendCommand();
         };
