@@ -1,10 +1,10 @@
 /*!*******************************************************************************************
  *  \file       hover_motion.hpp
  *  \brief      This file contains the definition of the HoverMotion class.
- *  \authors    Miguel Fernández Cortizas
+ *  \authors    Rafael Pérez Seguí
+ *              Miguel Fernández Cortizas
  *              Pedro Arias Pérez
  *              David Pérez Saura
- *              Rafael Pérez Seguí
  *
  *  \copyright  Copyright (c) 2022 Universidad Politécnica de Madrid
  *              All Rights Reserved
