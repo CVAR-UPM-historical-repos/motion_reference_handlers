@@ -36,70 +36,61 @@
 
 #include "motion_reference_handlers/speed_motion.hpp"
 
-namespace as2
-{
-    namespace motionReferenceHandlers
-    {
-        SpeedMotion::SpeedMotion(as2::Node *node_ptr) : BasicMotionReferenceHandler(node_ptr)
-        {
-            desired_control_mode_.yaw_mode = as2_msgs::msg::ControlMode::NONE;
-            desired_control_mode_.control_mode = as2_msgs::msg::ControlMode::SPEED;
-            desired_control_mode_.reference_frame = as2_msgs::msg::ControlMode::LOCAL_ENU_FRAME;
-        };
+namespace as2 {
+namespace motionReferenceHandlers {
+SpeedMotion::SpeedMotion(as2::Node *node_ptr) : BasicMotionReferenceHandler(node_ptr) {
+  desired_control_mode_.yaw_mode = as2_msgs::msg::ControlMode::NONE;
+  desired_control_mode_.control_mode = as2_msgs::msg::ControlMode::SPEED;
+  desired_control_mode_.reference_frame = as2_msgs::msg::ControlMode::LOCAL_ENU_FRAME;
+};
 
-        bool SpeedMotion::sendSpeedCommandWithYawAngle(
-            const float &vx, const float &vy, const float &vz, const float &yaw_angle)
-        {
-            return sendSpeedCommandWithYawAngle(
-                vx, vy, vz, tf2::toMsg(tf2::Quaternion(tf2::Vector3(0, 0, 1), yaw_angle)));
-        }
+bool SpeedMotion::sendSpeedCommandWithYawAngle(const float &vx, const float &vy, const float &vz,
+                                               const float &yaw_angle) {
+  return sendSpeedCommandWithYawAngle(
+      vx, vy, vz, tf2::toMsg(tf2::Quaternion(tf2::Vector3(0, 0, 1), yaw_angle)));
+}
 
-        bool SpeedMotion::sendSpeedCommandWithYawAngle(
-            const float &vx, const float &vy, const float &vz, const geometry_msgs::msg::Quaternion &q)
-        {
-            geometry_msgs::msg::PoseStamped pose_msg;
-            pose_msg.header.frame_id = generateTfName(node_ptr_->get_namespace(), "earth");
-            pose_msg.pose.orientation = q;
+bool SpeedMotion::sendSpeedCommandWithYawAngle(const float &vx, const float &vy, const float &vz,
+                                               const geometry_msgs::msg::Quaternion &q) {
+  geometry_msgs::msg::PoseStamped pose_msg;
+  pose_msg.header.frame_id = generateTfName(node_ptr_->get_namespace(), "earth");
+  pose_msg.pose.orientation = q;
 
-            geometry_msgs::msg::TwistStamped twist_msg;
-            twist_msg.header.frame_id = generateTfName(node_ptr_->get_namespace(), "earth");
-            twist_msg.twist.linear.x = vx;
-            twist_msg.twist.linear.y = vy;
-            twist_msg.twist.linear.z = vz;
+  geometry_msgs::msg::TwistStamped twist_msg;
+  twist_msg.header.frame_id = generateTfName(node_ptr_->get_namespace(), "earth");
+  twist_msg.twist.linear.x = vx;
+  twist_msg.twist.linear.y = vy;
+  twist_msg.twist.linear.z = vz;
 
-            return sendSpeedCommandWithYawAngle(pose_msg, twist_msg);
-        };
+  return sendSpeedCommandWithYawAngle(pose_msg, twist_msg);
+};
 
-        bool SpeedMotion::sendSpeedCommandWithYawAngle(
-            const geometry_msgs::msg::PoseStamped &pose, const geometry_msgs::msg::TwistStamped &twist)
-        {
-            desired_control_mode_.yaw_mode = as2_msgs::msg::ControlMode::YAW_ANGLE;
-            this->command_pose_msg_ = pose;
-            this->command_twist_msg_ = twist;
+bool SpeedMotion::sendSpeedCommandWithYawAngle(const geometry_msgs::msg::PoseStamped &pose,
+                                               const geometry_msgs::msg::TwistStamped &twist) {
+  desired_control_mode_.yaw_mode = as2_msgs::msg::ControlMode::YAW_ANGLE;
+  this->command_pose_msg_ = pose;
+  this->command_twist_msg_ = twist;
 
-            return this->sendCommand();
-        };
+  return this->sendCommand();
+};
 
-        bool SpeedMotion::sendSpeedCommandWithYawSpeed(
-            const float &vx, const float &vy, const float &vz, const float &yaw_speed)
-        {
-            geometry_msgs::msg::TwistStamped twist_msg;
-            twist_msg.header.frame_id = generateTfName(node_ptr_->get_namespace(), "earth");
-            twist_msg.twist.linear.x = vx;
-            twist_msg.twist.linear.y = vy;
-            twist_msg.twist.linear.z = vz;
-            twist_msg.twist.angular.z = yaw_speed;
+bool SpeedMotion::sendSpeedCommandWithYawSpeed(const float &vx, const float &vy, const float &vz,
+                                               const float &yaw_speed) {
+  geometry_msgs::msg::TwistStamped twist_msg;
+  twist_msg.header.frame_id = generateTfName(node_ptr_->get_namespace(), "earth");
+  twist_msg.twist.linear.x = vx;
+  twist_msg.twist.linear.y = vy;
+  twist_msg.twist.linear.z = vz;
+  twist_msg.twist.angular.z = yaw_speed;
 
-            return sendSpeedCommandWithYawSpeed(twist_msg);
-        };
+  return sendSpeedCommandWithYawSpeed(twist_msg);
+};
 
-        bool SpeedMotion::sendSpeedCommandWithYawSpeed(
-            const geometry_msgs::msg::TwistStamped &twist)
-        {
-            desired_control_mode_.yaw_mode = as2_msgs::msg::ControlMode::YAW_SPEED;
-            this->command_twist_msg_ = twist;
+bool SpeedMotion::sendSpeedCommandWithYawSpeed(const geometry_msgs::msg::TwistStamped &twist) {
+  desired_control_mode_.yaw_mode = as2_msgs::msg::ControlMode::YAW_SPEED;
+  this->command_twist_msg_ = twist;
 
-            return this->sendCommand();
-        };
-    } // namespace motionReferenceHandlers
-} // namespace as2
+  return this->sendCommand();
+};
+}  // namespace motionReferenceHandlers
+}  // namespace as2

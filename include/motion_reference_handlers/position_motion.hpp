@@ -37,45 +37,114 @@
 #ifndef POSITION_MOTION_COMMANDS_HPP
 #define POSITION_MOTION_COMMANDS_HPP
 
+#include <as2_core/tf_utils.hpp>
 #include <functional>
+#include <geometry_msgs/msg/pose_stamped.hpp>
+#include <geometry_msgs/msg/twist_stamped.hpp>
 #include <memory>
 #include <thread>
 
 #include "as2_core/node.hpp"
-#include <as2_core/tf_utils.hpp>
 #include "basic_motion_references.hpp"
 #include "tf2_geometry_msgs/tf2_geometry_msgs.h"
 
-#include <geometry_msgs/msg/pose_stamped.hpp>
-#include <geometry_msgs/msg/twist_stamped.hpp>
+namespace as2 {
+namespace motionReferenceHandlers {
 
-namespace as2
-{
-  namespace motionReferenceHandlers
-  {
-    class PositionMotion : public as2::motionReferenceHandlers::BasicMotionReferenceHandler
-    {
-    public:
-      PositionMotion(as2::Node *node_ptr);
-      ~PositionMotion(){};
+/**
+ * @brief The PositionMotion class is a motion reference handler that moves the
+ *       robot to a given position.
+ */
+class PositionMotion : public as2::motionReferenceHandlers::BasicMotionReferenceHandler {
+  public:
+  /**
+   * @brief PositionMotion Constructor.
+   * @param node as2::Node pointer.
+   */
+  PositionMotion(as2::Node *node_ptr);
+  ~PositionMotion(){};
 
-    public:
-      bool sendPositionCommandWithYawAngle(
-          const float &x, const float &y, const float &z, const float &yaw_angle,
-          const float &vx, const float &vy, const float &vz);
-      bool sendPositionCommandWithYawAngle(
-          const float &x, const float &y, const float &z, const geometry_msgs::msg::Quaternion &q,
-          const float &vx, const float &vy, const float &vz);
-      bool sendPositionCommandWithYawAngle(
-            const geometry_msgs::msg::PoseStamped &pose, const geometry_msgs::msg::TwistStamped &twist);
-      bool sendPositionCommandWithYawSpeed(
-          const float &x, const float &y, const float &z, const float &yaw_speed,
-          const float &vx, const float &vy, const float &vz);
-      bool sendPositionCommandWithYawSpeed(
-            const geometry_msgs::msg::PoseStamped &pose, const geometry_msgs::msg::TwistStamped &twist);
-    };
+  public:
+  /**
+   * @brief sendPositionCommandWithYawAngle sends a position command to the
+   *       robot.
+   *       The position command is sent in the ENU frame.
+   *       The yaw angle is given in radians.
+   *       The linear velocity is given in m/s.
+   * @param x x coordinate of the position command.
+   * @param y y coordinate of the position command.
+   * @param z z coordinate of the position command.
+   * @param yaw_angle yaw angle of the position command.
+   * @param vx linear velocity in x direction.
+   * @param vy linear velocity in y direction.
+   * @param vz linear velocity in z direction.
+   * @return true if the command was sent successfully, false otherwise.
+   */
+  bool sendPositionCommandWithYawAngle(const float &x, const float &y, const float &z,
+                                       const float &yaw_angle, const float &vx, const float &vy,
+                                       const float &vz);
 
-  } // namespace motionReferenceHandlers
-} // namespace as2
+  /**
+   * @brief sendPositionCommandWithYawAngle sends a position command to the
+   *      robot.
+   *      The position command is sent in the ENU frame.
+   *      The linear velocity is given in m/s.
+   * @param x x coordinate of the position command.
+   * @param y y coordinate of the position command.
+   * @param z z coordinate of the position command.
+   * @param q quaternion of the position command. (with the desired yaw angle)
+   * @param vx linear velocity in x direction.
+   * @param vy linear velocity in y direction.
+   * @param vz linear velocity in z direction.
+   * @return true if the command was sent successfully, false otherwise.
+   */
+  bool sendPositionCommandWithYawAngle(const float &x, const float &y, const float &z,
+                                       const geometry_msgs::msg::Quaternion &q, const float &vx,
+                                       const float &vy, const float &vz);
+  /**
+   * @brief sendPositionCommandWithYawAngle sends a position command to the
+   *     robot.
+   *     The position command is sent in the ENU frame.
+   * @param pose geometry_msgs::msg::PoseStamped with the desired position and yaw angle.
+   * @param twist geometry_msgs::msg::TwistStamped with the desired linear velocity.
+   * @return true if the command was sent successfully, false otherwise.
+   */
+  bool sendPositionCommandWithYawAngle(const geometry_msgs::msg::PoseStamped &pose,
+                                       const geometry_msgs::msg::TwistStamped &twist);
 
-#endif // POSITION_MOTION_COMMANDS_HPP
+  /**
+   * @brief sendPositionCommandWithYawSpeed sends a position command to the
+   *     robot.
+   *     The position command is sent in the ENU frame.
+   *     The yaw speed is given in rad/s.
+   *     The linear velocity is given in m/s.
+   * @param x x coordinate of the position command.
+   * @param y y coordinate of the position command.
+   * @param z z coordinate of the position command.
+   * @param yaw_speed yaw speed of the position command.
+   * @param vx linear velocity in x direction.
+   * @param vy linear velocity in y direction.
+   * @param vz linear velocity in z direction.
+   * @return true if the command was sent successfully, false otherwise.
+   */
+  bool sendPositionCommandWithYawSpeed(const float &x, const float &y, const float &z,
+                                       const float &yaw_speed, const float &vx, const float &vy,
+                                       const float &vz);
+
+  /**
+   * @brief sendPositionCommandWithYawSpeed sends a position command to the
+   *    robot.
+   *    The position command is sent in the ENU frame.
+   * @param x pose geometry_msgs::msg::PoseStamped with the desired position.
+   * @param twist geometry_msgs::msg::TwistStamped with the desired linear velocity and yaw speed.
+   * @return true if the command was sent successfully, false otherwise.
+   */
+
+  bool sendPositionCommandWithYawSpeed(const geometry_msgs::msg::PoseStamped &pose,
+                                       const geometry_msgs::msg::TwistStamped &twist);
+};
+
+}  // namespace motionReferenceHandlers
+}  // namespace as2
+
+#endif  // POSITION_MOTION_COMMANDS_HPP

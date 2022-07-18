@@ -1,10 +1,10 @@
 /*!*******************************************************************************************
  *  \file       hover_motion.cpp
  *  \brief      This file contains the implementation of the HoverMotion class.
- *  \authors    Miguel Fernández Cortizas
+ *  \authors    Rafael Pérez Seguí
+ *              Miguel Fernández Cortizas
  *              Pedro Arias Pérez
  *              David Pérez Saura
- *              Rafael Pérez Seguí
  *
  *  \copyright  Copyright (c) 2022 Universidad Politécnica de Madrid
  *              All Rights Reserved
@@ -36,23 +36,19 @@
 
 #include "motion_reference_handlers/hover_motion.hpp"
 
-namespace as2
-{
-    namespace motionReferenceHandlers
-    {
-        HoverMotion::HoverMotion(as2::Node *node_ptr) : BasicMotionReferenceHandler(node_ptr)
-        {
-            desired_control_mode_.yaw_mode = as2_msgs::msg::ControlMode::NONE;
-            desired_control_mode_.control_mode = as2_msgs::msg::ControlMode::HOVER;
-            desired_control_mode_.reference_frame = as2_msgs::msg::ControlMode::UNDEFINED_FRAME;
-        };
+namespace as2 {
+namespace motionReferenceHandlers {
+HoverMotion::HoverMotion(as2::Node *node_ptr) : BasicMotionReferenceHandler(node_ptr) {
+  desired_control_mode_.yaw_mode = as2_msgs::msg::ControlMode::NONE;
+  desired_control_mode_.control_mode = as2_msgs::msg::ControlMode::HOVER;
+  desired_control_mode_.reference_frame = as2_msgs::msg::ControlMode::UNDEFINED_FRAME;
+};
 
-        bool HoverMotion::sendHover()
-        {
-            desired_control_mode_.yaw_mode = as2_msgs::msg::ControlMode::NONE;
-            desired_control_mode_.control_mode = as2_msgs::msg::ControlMode::HOVER;
-            desired_control_mode_.reference_frame = as2_msgs::msg::ControlMode::UNDEFINED_FRAME;
-            sendCommand();
-        }
-    } // namespace motionReferenceHandlers
-} // namespace as2
+bool HoverMotion::sendHover() {
+  desired_control_mode_.yaw_mode = as2_msgs::msg::ControlMode::NONE;
+  desired_control_mode_.control_mode = as2_msgs::msg::ControlMode::HOVER;
+  desired_control_mode_.reference_frame = as2_msgs::msg::ControlMode::UNDEFINED_FRAME;
+  return sendCommand();
+}
+}  // namespace motionReferenceHandlers
+}  // namespace as2

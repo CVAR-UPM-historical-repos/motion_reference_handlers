@@ -38,6 +38,8 @@
 #define HOVER_MOTION_COMMANDS_HPP
 
 #include <functional>
+#include <geometry_msgs/msg/pose_stamped.hpp>
+#include <geometry_msgs/msg/twist_stamped.hpp>
 #include <memory>
 #include <thread>
 
@@ -45,24 +47,30 @@
 #include "basic_motion_references.hpp"
 #include "tf2_geometry_msgs/tf2_geometry_msgs.h"
 
-#include <geometry_msgs/msg/pose_stamped.hpp>
-#include <geometry_msgs/msg/twist_stamped.hpp>
+namespace as2 {
+namespace motionReferenceHandlers {
+/**
+ * @brief The HoverMotion class is a motion reference handler that allows the
+ *       robot to hover at the current position.
+ */
+class HoverMotion : public as2::motionReferenceHandlers::BasicMotionReferenceHandler {
+  public:
+  /**
+   * @brief HoverMotion Constructor.
+   * @param node as2::Node pointer.
+   */
+  HoverMotion(as2::Node *node_ptr);
+  ~HoverMotion(){};
 
-namespace as2
-{
-  namespace motionReferenceHandlers
-  {
-    class HoverMotion : public as2::motionReferenceHandlers::BasicMotionReferenceHandler
-    {
-    public:
-      HoverMotion(as2::Node *node_ptr);
-      ~HoverMotion(){};
+  public:
+  /**
+   * @brief Send hover motion command.
+   * @returns true if the motion reference was sent successfully.
+   */
+  bool sendHover();
+};
 
-    public:
-      bool sendHover();
-    };
+}  // namespace motionReferenceHandlers
+}  // namespace as2
 
-  } // namespace motionReferenceHandlers
-} // namespace as2
-
-#endif // HOVER_MOTION_COMMANDS_HPP
+#endif  // HOVER_MOTION_COMMANDS_HPP

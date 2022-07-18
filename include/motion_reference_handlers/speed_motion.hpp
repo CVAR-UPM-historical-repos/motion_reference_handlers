@@ -37,41 +37,100 @@
 #ifndef SPEED_MOTION_COMMANDS_HPP
 #define SPEED_MOTION_COMMANDS_HPP
 
+#include <as2_core/tf_utils.hpp>
 #include <functional>
+#include <geometry_msgs/msg/pose_stamped.hpp>
+#include <geometry_msgs/msg/twist_stamped.hpp>
 #include <memory>
 #include <thread>
 
 #include "as2_core/node.hpp"
-#include <as2_core/tf_utils.hpp>
 #include "basic_motion_references.hpp"
 #include "tf2_geometry_msgs/tf2_geometry_msgs.h"
 
-#include <geometry_msgs/msg/pose_stamped.hpp>
-#include <geometry_msgs/msg/twist_stamped.hpp>
+namespace as2 {
+namespace motionReferenceHandlers {
 
-namespace as2
-{
-  namespace motionReferenceHandlers
-  {
-    class SpeedMotion : public as2::motionReferenceHandlers::BasicMotionReferenceHandler
-    {
-    public:
-      SpeedMotion(as2::Node *node_ptr);
-      ~SpeedMotion(){};
+/**
+ * @brief The SpeedMotion class is a motion reference handler that moves the robot
+ *       at a given speed.
+ */
+class SpeedMotion : public as2::motionReferenceHandlers::BasicMotionReferenceHandler {
+  public:
+  /**
+   * @brief PositionMotion Constructor.
+   * @param node as2::Node pointer.
+   */
+  SpeedMotion(as2::Node *node_ptr);
+  ~SpeedMotion(){};
 
-    public:
-      bool sendSpeedCommandWithYawAngle(
-          const float &vx, const float &vy, const float &vz, const float &yaw_angle);
-      bool sendSpeedCommandWithYawAngle(
-          const float &vx, const float &vy, const float &vz, const geometry_msgs::msg::Quaternion &q);
-      bool sendSpeedCommandWithYawAngle(
-          const geometry_msgs::msg::PoseStamped &pose, const geometry_msgs::msg::TwistStamped &twist);
-      bool sendSpeedCommandWithYawSpeed(
-          const float &vx, const float &vy, const float &vz, const float &yaw_speed);
-      bool sendSpeedCommandWithYawSpeed(const geometry_msgs::msg::TwistStamped &twist);
-    };
+  public:
+  /**
+   * @brief sendSpeedCommandWithYawAngle sends a speed command to the
+   *       robot.
+   *       The speed command is sent in the ENU frame.
+   *       The linear velocity is given in m/s.
+   * @param vx Linear velocity in the x axis.
+   * @param vy Linear velocity in the y axis.
+   * @param vz Linear velocity in the z axis.
+   * @param yaw_angle Yaw angle in radians.
+   * @return true if the command was sent successfully, false otherwise.
+   */
+  bool sendSpeedCommandWithYawAngle(const float &vx, const float &vy, const float &vz,
+                                    const float &yaw_angle);
+  /**
+   * @brief sendSpeedCommandWithYawAngle sends a speed command to the
+   *      robot.
+   *      The speed command is sent in the ENU frame.
+   *      The linear velocity is given in m/s.
+   * @param vx Linear velocity in the x axis.
+   * @param vy Linear velocity in the y axis.
+   * @param vz Linear velocity in the z axis.
+   * @param q Quaternion that represents the yaw angle.
+   * @return true if the command was sent successfully, false otherwise.
+   */
+  bool sendSpeedCommandWithYawAngle(const float &vx, const float &vy, const float &vz,
+                                    const geometry_msgs::msg::Quaternion &q);
+  /**
+   * @brief sendSpeedCommandWithYawAngle sends a speed command to the
+   *     robot.
+   *     The speed command is sent in the ENU frame.
+   *     The linear velocity is given in m/s.
+   * @param pose PoseStamped message that represents the rotation .
+   * @param twist TwistStamped message that represents the linear velocity.
+   * @return true if the command was sent successfully, false otherwise.
+   */
+  bool sendSpeedCommandWithYawAngle(const geometry_msgs::msg::PoseStamped &pose,
+                                    const geometry_msgs::msg::TwistStamped &twist);
 
-  } // namespace motionReferenceHandlers
-} // namespace as2
+  /**
+   * @brief sendSpeedCommandWithYawSpeed sends a speed command to the
+   *      robot.
+   *      The speed command is sent in the ENU frame.
+   *      The linear velocity is given in m/s.
+   *      The yaw speed is given in rad/s.
+   * @param vx Linear velocity in the x axis.
+   * @param vy Linear velocity in the y axis.
+   * @param vz Linear velocity in the z axis.
+   * @param yaw_speed Yaw speed in rad/s.
+   * @return true if the command was sent successfully, false otherwise.
+   */
+  bool sendSpeedCommandWithYawSpeed(const float &vx, const float &vy, const float &vz,
+                                    const float &yaw_speed);
 
-#endif // SPEED_MOTION_COMMANDS_HPP
+  /**
+   * @brief sendSpeedCommandWithYawSpeed sends a speed command to the
+   *      robot.
+   *      The speed command is sent in the ENU frame.
+   *      The linear velocity is given in m/s.
+   *      The yaw speed is given in rad/s.
+   * @param twist TwistStamped message that represents the linear velocity and the angular yaw speed
+   * @return true if the command was sent successfully, false otherwise.
+   */
+  bool sendSpeedCommandWithYawSpeed(const geometry_msgs::msg::TwistStamped &twist);
+};
+
+}  // namespace motionReferenceHandlers
+}  // namespace as2
+
+#endif  // SPEED_MOTION_COMMANDS_HPP
