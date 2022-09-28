@@ -56,7 +56,7 @@ namespace motionReferenceHandlers {
  *       at a given speed.
  */
 class SpeedMotion : public as2::motionReferenceHandlers::BasicMotionReferenceHandler {
-  public:
+public:
   /**
    * @brief PositionMotion Constructor.
    * @param node as2::Node pointer.
@@ -64,7 +64,7 @@ class SpeedMotion : public as2::motionReferenceHandlers::BasicMotionReferenceHan
   SpeedMotion(as2::Node *node_ptr);
   ~SpeedMotion(){};
 
-  public:
+public:
   /**
    * @brief sendSpeedCommandWithYawAngle sends a speed command to the
    *       robot.
@@ -76,7 +76,9 @@ class SpeedMotion : public as2::motionReferenceHandlers::BasicMotionReferenceHan
    * @param yaw_angle Yaw angle in radians.
    * @return true if the command was sent successfully, false otherwise.
    */
-  bool sendSpeedCommandWithYawAngle(const float &vx, const float &vy, const float &vz,
+  bool sendSpeedCommandWithYawAngle(const float &vx,
+                                    const float &vy,
+                                    const float &vz,
                                     const float &yaw_angle);
   /**
    * @brief sendSpeedCommandWithYawAngle sends a speed command to the
@@ -89,7 +91,9 @@ class SpeedMotion : public as2::motionReferenceHandlers::BasicMotionReferenceHan
    * @param q Quaternion that represents the yaw angle.
    * @return true if the command was sent successfully, false otherwise.
    */
-  bool sendSpeedCommandWithYawAngle(const float &vx, const float &vy, const float &vz,
+  bool sendSpeedCommandWithYawAngle(const float &vx,
+                                    const float &vy,
+                                    const float &vz,
                                     const geometry_msgs::msg::Quaternion &q);
   /**
    * @brief sendSpeedCommandWithYawAngle sends a speed command to the
@@ -115,7 +119,9 @@ class SpeedMotion : public as2::motionReferenceHandlers::BasicMotionReferenceHan
    * @param yaw_speed Yaw speed in rad/s.
    * @return true if the command was sent successfully, false otherwise.
    */
-  bool sendSpeedCommandWithYawSpeed(const float &vx, const float &vy, const float &vz,
+  bool sendSpeedCommandWithYawSpeed(const float &vx,
+                                    const float &vy,
+                                    const float &vz,
                                     const float &yaw_speed);
 
   /**

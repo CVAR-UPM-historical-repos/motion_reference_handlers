@@ -56,7 +56,7 @@ namespace motionReferenceHandlers {
  *       robot to a given position.
  */
 class PositionMotion : public as2::motionReferenceHandlers::BasicMotionReferenceHandler {
-  public:
+public:
   /**
    * @brief PositionMotion Constructor.
    * @param node as2::Node pointer.
@@ -64,7 +64,7 @@ class PositionMotion : public as2::motionReferenceHandlers::BasicMotionReference
   PositionMotion(as2::Node *node_ptr);
   ~PositionMotion(){};
 
-  public:
+public:
   /**
    * @brief sendPositionCommandWithYawAngle sends a position command to the
    *       robot.
@@ -80,8 +80,12 @@ class PositionMotion : public as2::motionReferenceHandlers::BasicMotionReference
    * @param vz linear velocity in z direction.
    * @return true if the command was sent successfully, false otherwise.
    */
-  bool sendPositionCommandWithYawAngle(const float &x, const float &y, const float &z,
-                                       const float &yaw_angle, const float &vx, const float &vy,
+  bool sendPositionCommandWithYawAngle(const float &x,
+                                       const float &y,
+                                       const float &z,
+                                       const float &yaw_angle,
+                                       const float &vx,
+                                       const float &vy,
                                        const float &vz);
 
   /**
@@ -98,9 +102,13 @@ class PositionMotion : public as2::motionReferenceHandlers::BasicMotionReference
    * @param vz linear velocity in z direction.
    * @return true if the command was sent successfully, false otherwise.
    */
-  bool sendPositionCommandWithYawAngle(const float &x, const float &y, const float &z,
-                                       const geometry_msgs::msg::Quaternion &q, const float &vx,
-                                       const float &vy, const float &vz);
+  bool sendPositionCommandWithYawAngle(const float &x,
+                                       const float &y,
+                                       const float &z,
+                                       const geometry_msgs::msg::Quaternion &q,
+                                       const float &vx,
+                                       const float &vy,
+                                       const float &vz);
   /**
    * @brief sendPositionCommandWithYawAngle sends a position command to the
    *     robot.
@@ -127,8 +135,12 @@ class PositionMotion : public as2::motionReferenceHandlers::BasicMotionReference
    * @param vz linear velocity in z direction.
    * @return true if the command was sent successfully, false otherwise.
    */
-  bool sendPositionCommandWithYawSpeed(const float &x, const float &y, const float &z,
-                                       const float &yaw_speed, const float &vx, const float &vy,
+  bool sendPositionCommandWithYawSpeed(const float &x,
+                                       const float &y,
+                                       const float &z,
+                                       const float &yaw_speed,
+                                       const float &vx,
+                                       const float &vy,
                                        const float &vz);
 
   /**

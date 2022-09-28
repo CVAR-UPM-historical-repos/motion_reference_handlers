@@ -60,8 +60,8 @@ BasicMotionReferenceHandler::BasicMotionReferenceHandler(as2::Node *as2_ptr) : n
         });
 
     // Set initial control mode
-    desired_control_mode_.yaw_mode = as2_msgs::msg::ControlMode::NONE;
-    desired_control_mode_.control_mode = as2_msgs::msg::ControlMode::UNSET;
+    desired_control_mode_.yaw_mode        = as2_msgs::msg::ControlMode::NONE;
+    desired_control_mode_.control_mode    = as2_msgs::msg::ControlMode::UNSET;
     desired_control_mode_.reference_frame = as2_msgs::msg::ControlMode::UNDEFINED_FRAME;
   }
 
@@ -108,8 +108,8 @@ bool BasicMotionReferenceHandler::setMode(const as2_msgs::msg::ControlMode &mode
               as2::controlModeToString(mode).c_str());
 
   // Set request
-  auto request = as2_msgs::srv::SetControlMode::Request();
-  auto response = as2_msgs::srv::SetControlMode::Response();
+  auto request         = as2_msgs::srv::SetControlMode::Request();
+  auto response        = as2_msgs::srv::SetControlMode::Response();
   request.control_mode = mode;
 
   auto set_mode_cli = as2::SynchronousServiceClient<as2_msgs::srv::SetControlMode>(

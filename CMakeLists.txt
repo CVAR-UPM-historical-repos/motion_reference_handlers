@@ -15,23 +15,23 @@ endif()
 #set fPIC to ON by default
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
+# find dependencies
 set(PROJECT_DEPENDENCIES
   ament_cmake
   rclcpp
-  rclcpp_action
-  std_msgs
-  geometry_msgs
-  nav_msgs
   as2_core
   as2_msgs
   std_srvs
+  std_msgs
+  rclcpp_action
+  geometry_msgs
+  nav_msgs
   trajectory_msgs
 )
 
 foreach(DEPENDENCY ${PROJECT_DEPENDENCIES})
   find_package(${DEPENDENCY} REQUIRED)
 endforeach()
-
 
 include_directories(
   include
@@ -45,7 +45,6 @@ set(SOURCE_CPP_FILES
   src/position_motion.cpp
   src/speed_motion.cpp
   )
-
 
 add_library(${PROJECT_NAME} ${SOURCE_CPP_FILES})
 target_include_directories(${PROJECT_NAME}
@@ -61,16 +60,12 @@ ament_export_dependencies(
   ${PROJECT_DEPENDENCIES}
 )
 ament_export_libraries(${PROJECT_NAME})
-
-
-
 if(BUILD_TESTING)
   find_package(ament_cmake_cppcheck REQUIRED)
   find_package(ament_cmake_clang_format REQUIRED)
   
-  ament_cppcheck(src/ include/)
-  ament_clang_format(src/ include/)
-
+  ament_cppcheck(src/ include/ tests/)
+  ament_clang_format(src/ include/ tests/ --config ${CMAKE_CURRENT_SOURCE_DIR}/.clang-format)
 endif()
 
 install(

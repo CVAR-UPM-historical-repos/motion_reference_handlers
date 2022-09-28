@@ -56,7 +56,7 @@ namespace motionReferenceHandlers {
  *       each data has 4 dimensions: x, y, z, yaw.
  */
 class TrajectoryMotion : public as2::motionReferenceHandlers::BasicMotionReferenceHandler {
-  public:
+public:
   /**
    * @brief TrajectoryMotion constructor.
    * @param node as2::Node pointer.
@@ -64,7 +64,7 @@ class TrajectoryMotion : public as2::motionReferenceHandlers::BasicMotionReferen
   TrajectoryMotion(as2::Node *node_ptr);
   ~TrajectoryMotion(){};
 
-  public:
+public:
   /**
    * @brief sendTrajectoryCommandWithYawAngle sends a trajectory command to the robot.
    * @param x x coordinate of the trajectory point.
@@ -79,9 +79,15 @@ class TrajectoryMotion : public as2::motionReferenceHandlers::BasicMotionReferen
    * @param az z acceleration of the trajectory point.
    * @return true if the command was sent successfully, false otherwise.
    */
-  bool sendTrajectoryCommandWithYawAngle(const float &x, const float &y, const float &z,
-                                         const float &yaw_angle, const float &vx, const float &vy,
-                                         const float &vz, const float &ax, const float &ay,
+  bool sendTrajectoryCommandWithYawAngle(const float &x,
+                                         const float &y,
+                                         const float &z,
+                                         const float &yaw_angle,
+                                         const float &vx,
+                                         const float &vy,
+                                         const float &vz,
+                                         const float &ax,
+                                         const float &ay,
                                          const float &az);
 
   /**
@@ -109,9 +115,15 @@ class TrajectoryMotion : public as2::motionReferenceHandlers::BasicMotionReferen
    * @param az z acceleration of the trajectory point.
    * @return true if the command was sent successfully, false otherwise.
    */
-  bool sendTrajectoryCommandWithYawSpeed(const float &x, const float &y, const float &z,
-                                         const float &vx, const float &vy, const float &vz,
-                                         const float &yaw_speed, const float &ax, const float &ay,
+  bool sendTrajectoryCommandWithYawSpeed(const float &x,
+                                         const float &y,
+                                         const float &z,
+                                         const float &vx,
+                                         const float &vy,
+                                         const float &vz,
+                                         const float &yaw_speed,
+                                         const float &ax,
+                                         const float &ay,
                                          const float &az);
 
   /**

@@ -54,7 +54,7 @@ namespace motionReferenceHandlers {
  *       robot to hover at the current position.
  */
 class HoverMotion : public as2::motionReferenceHandlers::BasicMotionReferenceHandler {
-  public:
+public:
   /**
    * @brief HoverMotion Constructor.
    * @param node as2::Node pointer.
@@ -62,7 +62,7 @@ class HoverMotion : public as2::motionReferenceHandlers::BasicMotionReferenceHan
   HoverMotion(as2::Node *node_ptr);
   ~HoverMotion(){};
 
-  public:
+public:
   /**
    * @brief Send hover motion command.
    * @returns true if the motion reference was sent successfully.

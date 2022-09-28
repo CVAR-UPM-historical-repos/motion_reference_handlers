@@ -57,11 +57,11 @@
 namespace as2 {
 namespace motionReferenceHandlers {
 class BasicMotionReferenceHandler {
-  public:
+public:
   BasicMotionReferenceHandler(as2::Node *as2_ptr);
   ~BasicMotionReferenceHandler();
 
-  protected:
+protected:
   as2::Node *node_ptr_;
 
   trajectory_msgs::msg::JointTrajectoryPoint command_trajectory_msg_;
@@ -72,7 +72,7 @@ class BasicMotionReferenceHandler {
 
   bool sendCommand();
 
-  private:
+private:
   static int number_of_instances_;
 
   static rclcpp::Subscription<as2_msgs::msg::ControllerInfo>::SharedPtr controller_info_sub_;
