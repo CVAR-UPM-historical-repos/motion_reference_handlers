@@ -37,7 +37,7 @@
 #ifndef POSITION_MOTION_COMMANDS_HPP
 #define POSITION_MOTION_COMMANDS_HPP
 
-#include <as2_core/tf_utils.hpp>
+#include <as2_core/utils/tf_utils.hpp>
 #include <functional>
 #include <geometry_msgs/msg/pose_stamped.hpp>
 #include <geometry_msgs/msg/twist_stamped.hpp>

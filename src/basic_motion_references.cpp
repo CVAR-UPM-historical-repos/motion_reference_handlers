@@ -105,7 +105,7 @@ void BasicMotionReferenceHandler::publishCommands() {
 
 bool BasicMotionReferenceHandler::setMode(const as2_msgs::msg::ControlMode &mode) {
   RCLCPP_INFO(node_ptr_->get_logger(), "Setting control mode to [%s]",
-              as2::controlModeToString(mode).c_str());
+              as2::control_mode::controlModeToString(mode).c_str());
 
   // Set request
   auto request         = as2_msgs::srv::SetControlMode::Request();
@@ -113,7 +113,8 @@ bool BasicMotionReferenceHandler::setMode(const as2_msgs::msg::ControlMode &mode
   request.control_mode = mode;
 
   auto set_mode_cli = as2::SynchronousServiceClient<as2_msgs::srv::SetControlMode>(
-      as2_names::services::controller::set_control_mode);
+      as2_names::services::controller::set_control_mode,
+      node_ptr_->as2_node_shared_from_this());
 
   bool out = set_mode_cli.sendRequest(request, response);
 

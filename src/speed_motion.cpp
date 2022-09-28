@@ -57,11 +57,11 @@ bool SpeedMotion::sendSpeedCommandWithYawAngle(const float &vx,
                                                const float &vz,
                                                const geometry_msgs::msg::Quaternion &q) {
   geometry_msgs::msg::PoseStamped pose_msg;
-  pose_msg.header.frame_id  = generateTfName(node_ptr_->get_namespace(), "earth");
+  pose_msg.header.frame_id  = as2::tf::generateTfName(node_ptr_->get_namespace(), "earth");
   pose_msg.pose.orientation = q;
 
   geometry_msgs::msg::TwistStamped twist_msg;
-  twist_msg.header.frame_id = generateTfName(node_ptr_->get_namespace(), "earth");
+  twist_msg.header.frame_id = as2::tf::generateTfName(node_ptr_->get_namespace(), "earth");
   twist_msg.twist.linear.x  = vx;
   twist_msg.twist.linear.y  = vy;
   twist_msg.twist.linear.z  = vz;
@@ -83,7 +83,7 @@ bool SpeedMotion::sendSpeedCommandWithYawSpeed(const float &vx,
                                                const float &vz,
                                                const float &yaw_speed) {
   geometry_msgs::msg::TwistStamped twist_msg;
-  twist_msg.header.frame_id = generateTfName(node_ptr_->get_namespace(), "earth");
+  twist_msg.header.frame_id = as2::tf::generateTfName(node_ptr_->get_namespace(), "earth");
   twist_msg.twist.linear.x  = vx;
   twist_msg.twist.linear.y  = vy;
   twist_msg.twist.linear.z  = vz;
