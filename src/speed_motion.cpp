@@ -44,24 +44,32 @@ SpeedMotion::SpeedMotion(as2::Node *node_ptr) : BasicMotionReferenceHandler(node
   desired_control_mode_.reference_frame = as2_msgs::msg::ControlMode::LOCAL_ENU_FRAME;
 };
 
-bool SpeedMotion::sendSpeedCommandWithYawAngle(const float &vx,
+bool SpeedMotion::sendSpeedCommandWithYawAngle(const std::string &frame_id_speed,
+                                               const float &vx,
                                                const float &vy,
                                                const float &vz,
+                                               const std::string &frame_id_yaw,
                                                const float &yaw_angle) {
   return sendSpeedCommandWithYawAngle(
-      vx, vy, vz, tf2::toMsg(tf2::Quaternion(tf2::Vector3(0, 0, 1), yaw_angle)));
+      frame_id_speed, vx, vy, vz, frame_id_yaw, tf2::toMsg(tf2::Quaternion(tf2::Vector3(0, 0, 1), yaw_angle)));
 }
 
-bool SpeedMotion::sendSpeedCommandWithYawAngle(const float &vx,
+bool SpeedMotion::sendSpeedCommandWithYawAngle(const std::string &frame_id_speed,
+                                               const float &vx,
                                                const float &vy,
                                                const float &vz,
+                                               const std::string &frame_id_yaw,
                                                const geometry_msgs::msg::Quaternion &q) {
+  if (frame_id_speed == "" || frame_id_yaw == "") {
+    RCLCPP_ERROR(node_ptr_->get_logger(), "Frame id is empty");
+    return false;
+  }
   geometry_msgs::msg::PoseStamped pose_msg;
-  pose_msg.header.frame_id  = generateTfName(node_ptr_->get_namespace(), "earth");
+  pose_msg.header.frame_id  = as2::tf::generateTfName(node_ptr_->get_namespace(), frame_id_yaw);
   pose_msg.pose.orientation = q;
 
   geometry_msgs::msg::TwistStamped twist_msg;
-  twist_msg.header.frame_id = generateTfName(node_ptr_->get_namespace(), "earth");
+  twist_msg.header.frame_id = as2::tf::generateTfName(node_ptr_->get_namespace(), frame_id_speed);
   twist_msg.twist.linear.x  = vx;
   twist_msg.twist.linear.y  = vy;
   twist_msg.twist.linear.z  = vz;
@@ -71,6 +79,10 @@ bool SpeedMotion::sendSpeedCommandWithYawAngle(const float &vx,
 
 bool SpeedMotion::sendSpeedCommandWithYawAngle(const geometry_msgs::msg::PoseStamped &pose,
                                                const geometry_msgs::msg::TwistStamped &twist) {
+  if (pose.header.frame_id == "" || twist.header.frame_id == "") {
+    RCLCPP_ERROR(node_ptr_->get_logger(), "Frame id is empty");
+    return false;
+  }
   desired_control_mode_.yaw_mode = as2_msgs::msg::ControlMode::YAW_ANGLE;
   this->command_pose_msg_        = pose;
   this->command_twist_msg_       = twist;
@@ -78,12 +90,18 @@ bool SpeedMotion::sendSpeedCommandWithYawAngle(const geometry_msgs::msg::PoseSta
   return this->sendCommand();
 };
 
-bool SpeedMotion::sendSpeedCommandWithYawSpeed(const float &vx,
+bool SpeedMotion::sendSpeedCommandWithYawSpeed(const std::string &frame_id,
+                                               const float &vx,
                                                const float &vy,
                                                const float &vz,
                                                const float &yaw_speed) {
+  if (frame_id == "") {
+    RCLCPP_ERROR(node_ptr_->get_logger(), "Frame id is empty");
+    return false;
+  }
+
   geometry_msgs::msg::TwistStamped twist_msg;
-  twist_msg.header.frame_id = generateTfName(node_ptr_->get_namespace(), "earth");
+  twist_msg.header.frame_id = as2::tf::generateTfName(node_ptr_->get_namespace(), frame_id);
   twist_msg.twist.linear.x  = vx;
   twist_msg.twist.linear.y  = vy;
   twist_msg.twist.linear.z  = vz;
@@ -93,6 +111,11 @@ bool SpeedMotion::sendSpeedCommandWithYawSpeed(const float &vx,
 };
 
 bool SpeedMotion::sendSpeedCommandWithYawSpeed(const geometry_msgs::msg::TwistStamped &twist) {
+  if (twist.header.frame_id == "") {
+    RCLCPP_ERROR(node_ptr_->get_logger(), "Frame id is empty");
+    return false;
+  }
+
   desired_control_mode_.yaw_mode = as2_msgs::msg::ControlMode::YAW_SPEED;
   this->command_twist_msg_       = twist;
 

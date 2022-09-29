@@ -48,7 +48,8 @@ TrajectoryMotion::TrajectoryMotion(as2::Node *node_ptr) : BasicMotionReferenceHa
   this->command_trajectory_msg_.accelerations = std::vector<double>(4, 0.0);
 }
 
-bool TrajectoryMotion::sendTrajectoryCommandWithYawAngle(const float &x,
+bool TrajectoryMotion::sendTrajectoryCommandWithYawAngle(const std::string &frame_id,
+                                                         const float &x,
                                                          const float &y,
                                                          const float &z,
                                                          const float &yaw_angle,
@@ -58,6 +59,11 @@ bool TrajectoryMotion::sendTrajectoryCommandWithYawAngle(const float &x,
                                                          const float &ax,
                                                          const float &ay,
                                                          const float &az) {
+  if (frame_id == "") {
+    RCLCPP_ERROR(this->node_ptr_->get_logger(), "Frame id is empty");
+    return false;
+  }
+
   desired_control_mode_.yaw_mode = as2_msgs::msg::ControlMode::YAW_ANGLE;
   /*
   Matrix:
@@ -85,15 +91,17 @@ bool TrajectoryMotion::sendTrajectoryCommandWithYawAngle(const float &x,
   return this->sendCommand();
 }
 
-bool TrajectoryMotion::sendTrajectoryCommandWithYawAngle(const std::vector<double> &positions,
+bool TrajectoryMotion::sendTrajectoryCommandWithYawAngle(const std::string &frame_id,
+                                                         const std::vector<double> &positions,
                                                          const std::vector<double> &velocities,
                                                          const std::vector<double> &accelerations) {
   return this->sendTrajectoryCommandWithYawAngle(
-      positions[0], positions[1], positions[2], positions[3], velocities[0], velocities[1],
-      velocities[2], accelerations[0], accelerations[1], accelerations[2]);
+      frame_id, positions[0], positions[1], positions[2], positions[3], velocities[0],
+      velocities[1], velocities[2], accelerations[0], accelerations[1], accelerations[2]);
 }
 
-bool TrajectoryMotion::sendTrajectoryCommandWithYawSpeed(const float &x,
+bool TrajectoryMotion::sendTrajectoryCommandWithYawSpeed(const std::string &frame_id,
+                                                         const float &x,
                                                          const float &y,
                                                          const float &z,
                                                          const float &vx,
@@ -103,6 +111,11 @@ bool TrajectoryMotion::sendTrajectoryCommandWithYawSpeed(const float &x,
                                                          const float &ax,
                                                          const float &ay,
                                                          const float &az) {
+  if (frame_id == "") {
+    RCLCPP_ERROR(this->node_ptr_->get_logger(), "Frame id is empty");
+    return false;
+  }
+
   desired_control_mode_.yaw_mode = as2_msgs::msg::ControlMode::YAW_SPEED;
   /*
   Matrix:
@@ -130,12 +143,13 @@ bool TrajectoryMotion::sendTrajectoryCommandWithYawSpeed(const float &x,
   return this->sendCommand();
 }
 
-bool TrajectoryMotion::sendTrajectoryCommandWithYawSpeed(const std::vector<double> &positions,
+bool TrajectoryMotion::sendTrajectoryCommandWithYawSpeed(const std::string &frame_id,
+                                                         const std::vector<double> &positions,
                                                          const std::vector<double> &velocities,
                                                          const std::vector<double> &accelerations) {
   return this->sendTrajectoryCommandWithYawSpeed(
-      positions[0], positions[1], positions[2], velocities[0], velocities[1], velocities[2],
-      velocities[3], accelerations[0], accelerations[1], accelerations[2]);
+      frame_id, positions[0], positions[1], positions[2], velocities[0], velocities[1],
+      velocities[2], velocities[3], accelerations[0], accelerations[1], accelerations[2]);
 }
 }  // namespace motionReferenceHandlers
 }  // namespace as2

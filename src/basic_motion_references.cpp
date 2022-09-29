@@ -105,7 +105,7 @@ void BasicMotionReferenceHandler::publishCommands() {
 
 bool BasicMotionReferenceHandler::setMode(const as2_msgs::msg::ControlMode &mode) {
   RCLCPP_INFO(node_ptr_->get_logger(), "Setting control mode to [%s]",
-              as2::controlModeToString(mode).c_str());
+              as2::control_mode::controlModeToString(mode).c_str());
 
   // Set request
   auto request         = as2_msgs::srv::SetControlMode::Request();
