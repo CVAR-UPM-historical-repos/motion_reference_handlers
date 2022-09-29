@@ -97,7 +97,6 @@ bool BasicMotionReferenceHandler::sendCommand() {
 };
 
 void BasicMotionReferenceHandler::publishCommands() {
-  rclcpp::Time stamp = node_ptr_->now();
   command_traj_pub_->publish(command_trajectory_msg_);
   command_pose_pub_->publish(command_pose_msg_);
   command_twist_pub_->publish(command_twist_msg_);

@@ -70,17 +70,21 @@ bool PositionMotion::sendPositionCommandWithYawAngle(const std::string &frame_id
   }
 
   geometry_msgs::msg::PoseStamped pose_msg;
-  pose_msg.header.frame_id  = as2::tf::generateTfName(node_ptr_->get_namespace(), frame_id);
+  pose_msg.header.frame_id  = frame_id;
   pose_msg.pose.position.x  = x;
   pose_msg.pose.position.y  = y;
   pose_msg.pose.position.z  = z;
   pose_msg.pose.orientation = q;
 
   geometry_msgs::msg::TwistStamped twist_msg;
-  twist_msg.header.frame_id = as2::tf::generateTfName(node_ptr_->get_namespace(), frame_id);
+  twist_msg.header.frame_id = frame_id;
   twist_msg.twist.linear.x  = vx;
   twist_msg.twist.linear.y  = vy;
   twist_msg.twist.linear.z  = vz;
+
+  rclcpp::Time stamp = node_ptr_->now();
+  pose_msg.header.stamp  = stamp;
+  twist_msg.header.stamp = stamp;
 
   return sendPositionCommandWithYawAngle(pose_msg, twist_msg);
 };
@@ -114,17 +118,21 @@ bool PositionMotion::sendPositionCommandWithYawSpeed(const std::string &frame_id
   }
 
   geometry_msgs::msg::PoseStamped pose_msg;
-  pose_msg.header.frame_id = as2::tf::generateTfName(node_ptr_->get_namespace(), frame_id);
+  pose_msg.header.frame_id = frame_id;
   pose_msg.pose.position.x = x;
   pose_msg.pose.position.y = y;
   pose_msg.pose.position.z = z;
 
   geometry_msgs::msg::TwistStamped twist_msg;
-  twist_msg.header.frame_id = as2::tf::generateTfName(node_ptr_->get_namespace(), frame_id);
+  twist_msg.header.frame_id = frame_id;
   twist_msg.twist.linear.x  = vx;
   twist_msg.twist.linear.y  = vy;
   twist_msg.twist.linear.z  = vz;
   twist_msg.twist.angular.z = yaw_speed;
+
+  rclcpp::Time stamp = node_ptr_->now();
+  pose_msg.header.stamp  = stamp;
+  twist_msg.header.stamp = stamp;
 
   return sendPositionCommandWithYawSpeed(pose_msg, twist_msg);
 };
