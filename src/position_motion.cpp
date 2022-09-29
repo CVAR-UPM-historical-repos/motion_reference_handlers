@@ -64,8 +64,7 @@ bool PositionMotion::sendPositionCommandWithYawAngle(const std::string &frame_id
                                                      const float &vx = 0.0f,
                                                      const float &vy = 0.0f,
                                                      const float &vz = 0.0f) {
-  if (frame_id == "")
-  {
+  if (frame_id == "") {
     RCLCPP_ERROR(node_ptr_->get_logger(), "Frame id is empty");
     return false;
   }
@@ -89,8 +88,7 @@ bool PositionMotion::sendPositionCommandWithYawAngle(const std::string &frame_id
 bool PositionMotion::sendPositionCommandWithYawAngle(
     const geometry_msgs::msg::PoseStamped &pose,
     const geometry_msgs::msg::TwistStamped &twist) {
-  if (pose.header.frame_id == "" || twist.header.frame_id == "")
-  {
+  if (pose.header.frame_id == "" || twist.header.frame_id == "") {
     RCLCPP_ERROR(node_ptr_->get_logger(), "Frame id is empty");
     return false;
   }
@@ -110,8 +108,7 @@ bool PositionMotion::sendPositionCommandWithYawSpeed(const std::string &frame_id
                                                      const float &vx = 0.0f,
                                                      const float &vy = 0.0f,
                                                      const float &vz = 0.0f) {
-  if (frame_id == "")
-  {
+  if (frame_id == "") {
     RCLCPP_ERROR(node_ptr_->get_logger(), "Frame id is empty");
     return false;
   }
@@ -135,8 +132,7 @@ bool PositionMotion::sendPositionCommandWithYawSpeed(const std::string &frame_id
 bool PositionMotion::sendPositionCommandWithYawSpeed(
     const geometry_msgs::msg::PoseStamped &pose,
     const geometry_msgs::msg::TwistStamped &twist) {
-  if (pose.header.frame_id == "" || twist.header.frame_id == "")
-  {
+  if (pose.header.frame_id == "" || twist.header.frame_id == "") {
     RCLCPP_ERROR(node_ptr_->get_logger(), "Frame id is empty");
     return false;
   }

@@ -51,7 +51,8 @@ bool SpeedMotion::sendSpeedCommandWithYawAngle(const std::string &frame_id_speed
                                                const std::string &frame_id_yaw,
                                                const float &yaw_angle) {
   return sendSpeedCommandWithYawAngle(
-      frame_id_speed, vx, vy, vz, frame_id_yaw, tf2::toMsg(tf2::Quaternion(tf2::Vector3(0, 0, 1), yaw_angle)));
+      frame_id_speed, vx, vy, vz, frame_id_yaw,
+      tf2::toMsg(tf2::Quaternion(tf2::Vector3(0, 0, 1), yaw_angle)));
 }
 
 bool SpeedMotion::sendSpeedCommandWithYawAngle(const std::string &frame_id_speed,

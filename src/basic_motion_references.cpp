@@ -113,8 +113,7 @@ bool BasicMotionReferenceHandler::setMode(const as2_msgs::msg::ControlMode &mode
   request.control_mode = mode;
 
   auto set_mode_cli = as2::SynchronousServiceClient<as2_msgs::srv::SetControlMode>(
-      as2_names::services::controller::set_control_mode,
-      node_ptr_);
+      as2_names::services::controller::set_control_mode, node_ptr_);
 
   bool out = set_mode_cli.sendRequest(request, response);
 
