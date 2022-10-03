@@ -61,10 +61,6 @@ bool SpeedMotion::sendSpeedCommandWithYawAngle(const std::string &frame_id_speed
                                                const float &vz,
                                                const std::string &frame_id_yaw,
                                                const geometry_msgs::msg::Quaternion &q) {
-  if (frame_id_speed == "" || frame_id_yaw == "") {
-    RCLCPP_ERROR(node_ptr_->get_logger(), "Frame id is empty");
-    return false;
-  }
   geometry_msgs::msg::PoseStamped pose_msg;
   pose_msg.header.frame_id  = frame_id_yaw;
   pose_msg.pose.orientation = q;
@@ -75,7 +71,7 @@ bool SpeedMotion::sendSpeedCommandWithYawAngle(const std::string &frame_id_speed
   twist_msg.twist.linear.y  = vy;
   twist_msg.twist.linear.z  = vz;
 
-  rclcpp::Time stamp = node_ptr_->now();
+  rclcpp::Time stamp     = node_ptr_->now();
   pose_msg.header.stamp  = stamp;
   twist_msg.header.stamp = stamp;
 
@@ -100,11 +96,6 @@ bool SpeedMotion::sendSpeedCommandWithYawSpeed(const std::string &frame_id,
                                                const float &vy,
                                                const float &vz,
                                                const float &yaw_speed) {
-  if (frame_id == "") {
-    RCLCPP_ERROR(node_ptr_->get_logger(), "Frame id is empty");
-    return false;
-  }
-
   geometry_msgs::msg::TwistStamped twist_msg;
   twist_msg.header.frame_id = frame_id;
   twist_msg.twist.linear.x  = vx;
@@ -112,7 +103,7 @@ bool SpeedMotion::sendSpeedCommandWithYawSpeed(const std::string &frame_id,
   twist_msg.twist.linear.z  = vz;
   twist_msg.twist.angular.z = yaw_speed;
 
-  rclcpp::Time stamp = node_ptr_->now();
+  rclcpp::Time stamp     = node_ptr_->now();
   twist_msg.header.stamp = stamp;
 
   return sendSpeedCommandWithYawSpeed(twist_msg);
@@ -123,7 +114,6 @@ bool SpeedMotion::sendSpeedCommandWithYawSpeed(const geometry_msgs::msg::TwistSt
     RCLCPP_ERROR(node_ptr_->get_logger(), "Frame id is empty");
     return false;
   }
-
   desired_control_mode_.yaw_mode = as2_msgs::msg::ControlMode::YAW_SPEED;
   this->command_twist_msg_       = twist;
 

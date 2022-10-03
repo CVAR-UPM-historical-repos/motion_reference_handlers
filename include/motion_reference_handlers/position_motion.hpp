@@ -71,21 +71,23 @@ public:
    *       The yaw angle is given in radians.
    *       The linear velocity limitation is given in m/s.
    *       The position command and the velocity limitation are sent in the input frame id.
-   * @param frame_id frame id of the position and velocity command.
+   * @param frame_id_pose frame id of the position command.
    * @param x x coordinate of the position command.
    * @param y y coordinate of the position command.
    * @param z z coordinate of the position command.
    * @param yaw_angle yaw angle of the position command.
+   * @param frame_id_twist frame id of the velocity limitation.
    * @param vx linear velocity limitation in x direction.
    * @param vy linear velocity limitation in y direction.
    * @param vz linear velocity limitation in z direction.
    * @return true if the command was sent successfully, false otherwise.
    */
-  bool sendPositionCommandWithYawAngle(const std::string &frame_id,
+  bool sendPositionCommandWithYawAngle(const std::string &frame_id_pose,
                                        const float &x,
                                        const float &y,
                                        const float &z,
                                        const float &yaw_angle,
+                                       const std::string &frame_id_twist,
                                        const float &vx,
                                        const float &vy,
                                        const float &vz);
@@ -96,21 +98,23 @@ public:
    *      The yaw angle is given in a quaternion.
    *      The linear velocity is given in m/s.
    *      The position command and the velocity limitation are sent in the input frame id.
-   * @param frame_id frame id of the position and velocity command.
+   * @param frame_id_pose frame id of the position command.
    * @param x x coordinate of the position command.
    * @param y y coordinate of the position command.
    * @param z z coordinate of the position command.
-   * @param q quaternion of the position command. (with the desired yaw angle)
+   * @param q quaternion of the position command. (with the desired yaw angle).
+   * @param frame_id_twist frame id of the velocity limitation.
    * @param vx linear velocity limitation in x direction.
    * @param vy linear velocity limitation in y direction.
    * @param vz linear velocity limitation in z direction.
    * @return true if the command was sent successfully, false otherwise.
    */
-  bool sendPositionCommandWithYawAngle(const std::string &frame_id,
+  bool sendPositionCommandWithYawAngle(const std::string &frame_id_pose,
                                        const float &x,
                                        const float &y,
                                        const float &z,
                                        const geometry_msgs::msg::Quaternion &q,
+                                       const std::string &frame_id_twist,
                                        const float &vx,
                                        const float &vy,
                                        const float &vz);
@@ -131,21 +135,23 @@ public:
    *     The yaw speed is given in rad/s.
    *     The linear velocity is given in m/s.
    *     The position command and the velocity limitation are sent in the input frame id.
-   * @param frame_id frame id of the position and velocity command.
+   * @param frame_id_pose frame id of the position command.
    * @param x x coordinate of the position command.
    * @param y y coordinate of the position command.
    * @param z z coordinate of the position command.
    * @param yaw_speed yaw speed of the position command.
+   * @param frame_id_twist frame id of the velocity limitation.
    * @param vx linear velocity limitation in x direction.
    * @param vy linear velocity limitation in y direction.
    * @param vz linear velocity limitation in z direction.
    * @return true if the command was sent successfully, false otherwise.
    */
-  bool sendPositionCommandWithYawSpeed(const std::string &frame_id,
+  bool sendPositionCommandWithYawSpeed(const std::string &frame_id_pose,
                                        const float &x,
                                        const float &y,
                                        const float &z,
                                        const float &yaw_speed,
+                                       const std::string &frame_id_twist,
                                        const float &vx,
                                        const float &vy,
                                        const float &vz);
