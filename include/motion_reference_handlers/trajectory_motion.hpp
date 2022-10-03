@@ -67,6 +67,7 @@ public:
 public:
   /**
    * @brief sendTrajectoryCommandWithYawAngle sends a trajectory command to the robot.
+   * @param frame_id frame id of trayectory point.
    * @param x x coordinate of the trajectory point.
    * @param y y coordinate of the trajectory point.
    * @param z z coordinate of the trajectory point.
@@ -79,7 +80,8 @@ public:
    * @param az z acceleration of the trajectory point.
    * @return true if the command was sent successfully, false otherwise.
    */
-  bool sendTrajectoryCommandWithYawAngle(const float &x,
+  bool sendTrajectoryCommandWithYawAngle(const std::string &frame_id,
+                                         const float &x,
                                          const float &y,
                                          const float &z,
                                          const float &yaw_angle,
@@ -92,17 +94,20 @@ public:
 
   /**
    * @brief sendTrajectoryCommandWithYawAngle sends a trajectory command to the robot.
+   * @param frame_id frame id of trayectory point.
    * @param positions vector of positions of the trajectory point (x,y,z,yaw).
    * @param velocities vector of velocities of the trajectory point (vx,vy,vz,vyaw).
    * @param accelerations vector of accelerations of the trajectory point (ax,ay,az,ayaw).
    * @return true if the command was sent successfully, false otherwise.
    */
-  bool sendTrajectoryCommandWithYawAngle(const std::vector<double> &positions,
+  bool sendTrajectoryCommandWithYawAngle(const std::string &frame_id,
+                                         const std::vector<double> &positions,
                                          const std::vector<double> &velocities,
                                          const std::vector<double> &accelerations);
 
   /**
    * @brief sendTrajectoryCommandWithYawSpeed sends a trajectory command to the robot.
+   * @param frame_id frame id of trayectory point.
    * @param x x coordinate of the trajectory point.
    * @param y y coordinate of the trajectory point.
    * @param z z coordinate of the trajectory point.
@@ -115,7 +120,8 @@ public:
    * @param az z acceleration of the trajectory point.
    * @return true if the command was sent successfully, false otherwise.
    */
-  bool sendTrajectoryCommandWithYawSpeed(const float &x,
+  bool sendTrajectoryCommandWithYawSpeed(const std::string &frame_id,
+                                         const float &x,
                                          const float &y,
                                          const float &z,
                                          const float &vx,
@@ -128,12 +134,14 @@ public:
 
   /**
    * @brief sendTrajectoryCommandWithYawSpeed sends a trajectory command to the robot.
+   * @param frame_id frame id of trayectory point.
    * @param positions vector of positions of the trajectory point (x,y,z,yaw).
    * @param velocities vector of velocities of the trajectory point (vx,vy,vz,vyaw).
    * @param accelerations vector of accelerations of the trajectory point (ax,ay,az,ayaw).
    * @return true if the command was sent successfully, false otherwise.
    */
-  bool sendTrajectoryCommandWithYawSpeed(const std::vector<double> &positions,
+  bool sendTrajectoryCommandWithYawSpeed(const std::string &frame_id,
+                                         const std::vector<double> &positions,
                                          const std::vector<double> &velocities,
                                          const std::vector<double> &accelerations);
 };

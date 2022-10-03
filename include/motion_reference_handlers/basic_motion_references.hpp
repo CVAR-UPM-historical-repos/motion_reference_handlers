@@ -46,11 +46,11 @@
 #include <thread>
 #include <trajectory_msgs/msg/joint_trajectory_point.hpp>
 
-#include "as2_core/control_mode_utils/control_mode_utils.hpp"
 #include "as2_core/names/services.hpp"
 #include "as2_core/names/topics.hpp"
 #include "as2_core/node.hpp"
 #include "as2_core/synchronous_service_client.hpp"
+#include "as2_core/utils/control_mode_utils.hpp"
 #include "as2_msgs/srv/set_control_mode.hpp"
 #include "rclcpp/rclcpp.hpp"
 
