@@ -44,6 +44,12 @@ SpeedMotion::SpeedMotion(as2::Node *node_ptr) : BasicMotionReferenceHandler(node
   desired_control_mode_.reference_frame = as2_msgs::msg::ControlMode::LOCAL_ENU_FRAME;
 };
 
+bool SpeedMotion::ownSendCommand() {
+  bool send_pose  = sendPoseCommand();
+  bool send_twist = sendTwistCommand();
+  return send_pose && send_twist;
+};
+
 bool SpeedMotion::sendSpeedCommandWithYawAngle(const std::string &frame_id_speed,
                                                const float &vx,
                                                const float &vy,
@@ -88,7 +94,7 @@ bool SpeedMotion::sendSpeedCommandWithYawAngle(const geometry_msgs::msg::PoseSta
   this->command_pose_msg_        = pose;
   this->command_twist_msg_       = twist;
 
-  return this->sendCommand();
+  return this->ownSendCommand();
 };
 
 bool SpeedMotion::sendSpeedCommandWithYawSpeed(const std::string &frame_id,
@@ -117,7 +123,7 @@ bool SpeedMotion::sendSpeedCommandWithYawSpeed(const geometry_msgs::msg::TwistSt
   desired_control_mode_.yaw_mode = as2_msgs::msg::ControlMode::YAW_SPEED;
   this->command_twist_msg_       = twist;
 
-  return this->sendCommand();
+  return this->sendTwistCommand();
 };
 }  // namespace motionReferenceHandlers
 }  // namespace as2

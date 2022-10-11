@@ -66,6 +66,12 @@ public:
 
 public:
   /**
+   * @brief ownSendCommand sends the pose and twist messages.
+   * @return true if commands was sent successfully, false otherwise.
+   */
+  bool ownSendCommand();
+
+  /**
    * @brief sendPositionCommandWithYawAngle sends a position command to the
    *       robot.
    *       The yaw angle is given in radians.

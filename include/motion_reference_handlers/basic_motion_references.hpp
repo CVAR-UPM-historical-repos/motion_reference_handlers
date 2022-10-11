@@ -70,7 +70,10 @@ protected:
 
   as2_msgs::msg::ControlMode desired_control_mode_;
 
-  bool sendCommand();
+  bool sendPoseCommand();
+  bool sendTwistCommand();
+  bool sendTrajectoryCommand();
+  bool checkMode();
 
 private:
   static int number_of_instances_;

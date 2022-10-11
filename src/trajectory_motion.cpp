@@ -88,7 +88,7 @@ bool TrajectoryMotion::sendTrajectoryCommandWithYawAngle(const std::string &fram
   this->command_trajectory_msg_.velocities[3]    = 0.0;
   this->command_trajectory_msg_.accelerations[3] = 0.0;
 
-  return this->sendCommand();
+  return this->sendTrajectoryCommand();
 }
 
 bool TrajectoryMotion::sendTrajectoryCommandWithYawAngle(const std::string &frame_id,
@@ -140,7 +140,7 @@ bool TrajectoryMotion::sendTrajectoryCommandWithYawSpeed(const std::string &fram
   this->command_trajectory_msg_.velocities[3]    = yaw_speed;
   this->command_trajectory_msg_.accelerations[3] = 0.0;
 
-  return this->sendCommand();
+  return this->sendTrajectoryCommand();
 }
 
 bool TrajectoryMotion::sendTrajectoryCommandWithYawSpeed(const std::string &frame_id,

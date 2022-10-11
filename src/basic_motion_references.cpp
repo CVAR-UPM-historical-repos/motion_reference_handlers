@@ -82,7 +82,7 @@ BasicMotionReferenceHandler::~BasicMotionReferenceHandler() {
   }
 };
 
-bool BasicMotionReferenceHandler::sendCommand() {
+bool BasicMotionReferenceHandler::checkMode() {
   // TODO: Check comparation
   // if (this->current_mode_ != desired_control_mode_)
   if (this->current_mode_.yaw_mode != desired_control_mode_.yaw_mode ||
@@ -92,15 +92,32 @@ bool BasicMotionReferenceHandler::sendCommand() {
       return false;
     }
   }
-  publishCommands();
+  return true;
+}
+
+bool BasicMotionReferenceHandler::sendPoseCommand() {
+  if (!checkMode()) {
+    return false;
+  }
+  command_pose_pub_->publish(command_pose_msg_);
   return true;
 };
 
-void BasicMotionReferenceHandler::publishCommands() {
-  command_traj_pub_->publish(command_trajectory_msg_);
-  command_pose_pub_->publish(command_pose_msg_);
+bool BasicMotionReferenceHandler::sendTwistCommand() {
+  if (!checkMode()) {
+    return false;
+  }
   command_twist_pub_->publish(command_twist_msg_);
-}
+  return true;
+};
+
+bool BasicMotionReferenceHandler::sendTrajectoryCommand() {
+  if (!checkMode()) {
+    return false;
+  }
+  command_traj_pub_->publish(command_trajectory_msg_);
+  return true;
+};
 
 bool BasicMotionReferenceHandler::setMode(const as2_msgs::msg::ControlMode &mode) {
   RCLCPP_INFO(node_ptr_->get_logger(), "Setting control mode to [%s]",
