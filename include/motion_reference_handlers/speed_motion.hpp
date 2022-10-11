@@ -66,6 +66,12 @@ public:
 
 public:
   /**
+   * @brief ownSendCommand sends pose and twist messages.
+   * @return true if commands was sent successfully, false otherwise.
+   */
+  bool ownSendCommand();
+
+  /**
    * @brief sendSpeedCommandWithYawAngle sends a speed command to the
    *       robot.
    *       The speed command is sent in the input frame id.

@@ -48,7 +48,7 @@ bool HoverMotion::sendHover() {
   desired_control_mode_.yaw_mode        = as2_msgs::msg::ControlMode::NONE;
   desired_control_mode_.control_mode    = as2_msgs::msg::ControlMode::HOVER;
   desired_control_mode_.reference_frame = as2_msgs::msg::ControlMode::UNDEFINED_FRAME;
-  return sendCommand();
+  return checkMode();
 }
 }  // namespace motionReferenceHandlers
 }  // namespace as2
