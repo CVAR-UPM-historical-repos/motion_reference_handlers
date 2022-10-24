@@ -19,6 +19,7 @@ set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 set(PROJECT_DEPENDENCIES
   ament_cmake
   rclcpp
+  rclpy
   as2_core
   as2_msgs
   std_srvs
@@ -81,5 +82,8 @@ install(
   RUNTIME DESTINATION bin
   INCLUDES DESTINATION include
 )
+
+# Install Python modules
+ament_python_install_package(${PROJECT_NAME})
 
 ament_package()
