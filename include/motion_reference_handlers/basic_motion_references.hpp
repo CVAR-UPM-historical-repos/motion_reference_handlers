@@ -86,7 +86,6 @@ private:
   static rclcpp::Publisher<geometry_msgs::msg::TwistStamped>::SharedPtr command_twist_pub_;
 
   bool setMode(const as2_msgs::msg::ControlMode &mode);
-  void publishCommands();
 };
 
 }  // namespace motionReferenceHandlers
