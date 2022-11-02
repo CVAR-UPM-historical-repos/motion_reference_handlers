@@ -77,8 +77,7 @@ class BasicMotionReferenceHandler():
 
     def checkMode(self):
         if (self.desired_control_mode_.yaw_mode != self.motion_handler_.current_mode_.yaw_mode or
-            self.desired_control_mode_.control_mode != self.motion_handler_.current_mode_.control_mode or
-                self.desired_control_mode_.reference_frame != self.motion_handler_.current_mode_.reference_frame):
+            self.desired_control_mode_.control_mode != self.motion_handler_.current_mode_.control_mode):
             if not self.setMode(self.desired_control_mode_):
                 return False
         return True

@@ -41,7 +41,7 @@ namespace motionReferenceHandlers {
 PositionMotion::PositionMotion(as2::Node *node_ptr) : BasicMotionReferenceHandler(node_ptr) {
   desired_control_mode_.yaw_mode        = as2_msgs::msg::ControlMode::NONE;
   desired_control_mode_.control_mode    = as2_msgs::msg::ControlMode::POSITION;
-  desired_control_mode_.reference_frame = as2_msgs::msg::ControlMode::LOCAL_ENU_FRAME;
+  desired_control_mode_.reference_frame = as2_msgs::msg::ControlMode::UNDEFINED_FRAME;
 };
 
 bool PositionMotion::ownSendCommand() {
