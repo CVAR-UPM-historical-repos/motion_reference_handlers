@@ -1,6 +1,10 @@
-import copy
-from rclpy.qos import qos_profile_sensor_data, qos_profile_system_default
+"""
+Implementation of a motion reference handler base.
+"""
 
+import copy
+import rclpy
+from rclpy.qos import qos_profile_sensor_data, qos_profile_system_default
 from as2_msgs.msg import ControlMode, ControllerInfo
 from as2_msgs.srv import SetControlMode
 from geometry_msgs.msg import PoseStamped, TwistStamped
@@ -10,14 +14,13 @@ as2_names_topic_motion_reference_qos = qos_profile_sensor_data
 as2_names_topic_motion_reference_pose = "motion_reference/pose"
 as2_names_topic_motion_reference_twist = "motion_reference/twist"
 as2_names_topic_motion_reference_trajectory = "motion_reference/trajectory"
-
 as2_names_topic_controller_qos = qos_profile_system_default
 as2_names_topic_controller_info = "controller/info"
-
 as2_names_srv_controller_set_control_mode = "controller/set_control_mode"
 
 
 class Singleton(type):
+    """ Implementation of a singleton class """
     _instances = {}
 
     def __call__(cls, *args, **kwargs):
@@ -30,6 +33,7 @@ class Singleton(type):
 
 
 class BasicMotionReferencesBase(metaclass=Singleton):
+    """ Implementation of a motion reference handler base for singletons """
     number_of_instances_ = -1
     current_mode_ = ControlMode()
     controller_info_sub_ = ControllerInfo()
@@ -37,33 +41,39 @@ class BasicMotionReferencesBase(metaclass=Singleton):
     command_pose_pub_ = None
     command_twist_pub_ = None
 
-    def __init__(self, node):
+    def __init__(self, node: rclpy.Node):
         self.number_of_instances_ += 1
 
-        if (self.number_of_instances_ == 0):
+        if self.number_of_instances_ == 0:
             self.controller_info_sub_ = node.create_subscription(
-                ControllerInfo, as2_names_topic_controller_info, self.controller_info_callback, as2_names_topic_controller_qos)
+                ControllerInfo, as2_names_topic_controller_info,
+                self.controller_info_callback, as2_names_topic_controller_qos)
 
             self.command_pose_pub_ = node.create_publisher(
-                PoseStamped, as2_names_topic_motion_reference_pose, as2_names_topic_motion_reference_qos)
+                PoseStamped, as2_names_topic_motion_reference_pose,
+                as2_names_topic_motion_reference_qos)
 
             self.command_twist_pub_ = node.create_publisher(
-                TwistStamped, as2_names_topic_motion_reference_twist, as2_names_topic_motion_reference_qos)
+                TwistStamped, as2_names_topic_motion_reference_twist,
+                as2_names_topic_motion_reference_qos)
 
             self.command_traj_pub_ = node.create_publisher(
-                JointTrajectoryPoint, as2_names_topic_motion_reference_trajectory, as2_names_topic_motion_reference_qos)
+                JointTrajectoryPoint, as2_names_topic_motion_reference_trajectory,
+                as2_names_topic_motion_reference_qos)
 
         node.get_logger().info('There are %d instances of BasicMotionReferenceHandler created' %
                                (self.number_of_instances_))
 
-    def controller_info_callback(self, msg):
+    def controller_info_callback(self, msg: ControllerInfo):
+        """ Callback for controller info """
         self.controller_info_sub_ = msg
         return
 
 
 class BasicMotionReferenceHandler():
+    """ Implementation of a motion reference handler base """
 
-    def __init__(self, node):
+    def __init__(self, node: rclpy.Node):
         self.motion_handler_ = BasicMotionReferencesBase(node)
 
         self.node = node
@@ -75,36 +85,42 @@ class BasicMotionReferenceHandler():
         self.desired_control_mode_.control_mode = ControlMode.UNSET
         self.desired_control_mode_.reference_frame = ControlMode.UNDEFINED_FRAME
 
-    def checkMode(self):
+    def check_mode(self) -> bool:
+        """ Check if the current mode is the desired mode """
         if (self.desired_control_mode_.yaw_mode != self.motion_handler_.current_mode_.yaw_mode or
             self.desired_control_mode_.control_mode != self.motion_handler_.current_mode_.control_mode):
-            if not self.setMode(self.desired_control_mode_):
+            if not self.set_mode(self.desired_control_mode_):
                 return False
         return True
 
-    def sendPoseCommand(self):
-        if not self.checkMode():
+    def send_pose_command(self) -> bool:
+        """ Send a pose command """
+        if not self.check_mode():
             return False
         self.command_pose_msg_.header.stamp = self.node.get_clock().now().to_msg()
-        self.motion_handler_.command_pose_pub_.publish(self.command_pose_msg_)
+        self.motion_handler_.command_pose_pub_.publish(
+            self.command_pose_msg_)
         return True
 
-    def sendTwistCommand(self):
-        if not self.checkMode():
+    def send_twist_command(self) -> bool:
+        """ Send a twist command """
+        if not self.check_mode():
             return False
         self.command_twist_msg_.header.stamp = self.node.get_clock().now().to_msg()
         self.motion_handler_.command_twist_pub_.publish(
             self.command_twist_msg_)
         return True
 
-    def sendTrajectoryCommand(self):
-        if not self.checkMode():
+    def send_trajectory_command(self) -> bool:
+        """ Send a trajectory command """
+        if not self.check_mode():
             return False
         self.motion_handler_.command_traj_pub_.publish(
             self.command_trajectory_msg_)
         return True
 
-    def setMode(self, mode):
+    def set_mode(self, mode: ControlMode) -> bool:
+        """ Set the control mode """
         set_control_mode_cli_ = self.node.create_client(
             SetControlMode, as2_names_srv_controller_set_control_mode)
 
@@ -118,7 +134,7 @@ class BasicMotionReferenceHandler():
         resp = set_control_mode_cli_.call(req)
         if resp.success:
             self.motion_handler_.current_mode_ = copy.deepcopy(mode)
-            self.node.get_logger().debug(f"Set control mode success")
+            self.node.get_logger().debug("Set control mode success")
             return True
 
         self.node.get_logger().error("Failed to set control mode")

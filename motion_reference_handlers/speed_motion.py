@@ -3,6 +3,7 @@ Implementation of a motion reference handler for speed motion.
 """
 
 from typing import Union
+import rclpy
 from as2_msgs.msg import ControlMode
 from geometry_msgs.msg import PoseStamped, TwistStamped
 from motion_reference_handlers import utils
@@ -12,7 +13,7 @@ from motion_reference_handlers.basic_motion_references import BasicMotionReferen
 class SpeedMotion(BasicMotionReferenceHandler):
     """ Send speed motion command """
 
-    def __init__(self, node):
+    def __init__(self, node: rclpy.Node):
         super().__init__(node)
         self.desired_control_mode_.yaw_mode = ControlMode.NONE
         self.desired_control_mode_.control_mode = ControlMode.SPEED
@@ -26,10 +27,10 @@ class SpeedMotion(BasicMotionReferenceHandler):
         send_pose = True
         if pose_msg is not None:
             self.command_pose_msg_ = pose_msg
-            send_pose = self.sendPoseCommand()
+            send_pose = self.send_pose_command()
 
         self.command_twist_msg_ = twist_mgs
-        send_twist = self.sendTwistCommand()
+        send_twist = self.send_twist_command()
         return send_pose and send_twist
 
     def __check_input_twist(self, twist: Union[TwistStamped, list],
