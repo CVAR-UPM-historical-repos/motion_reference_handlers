@@ -86,8 +86,7 @@ bool BasicMotionReferenceHandler::checkMode() {
   // TODO: Check comparation
   // if (this->current_mode_ != desired_control_mode_)
   if (this->current_mode_.yaw_mode != desired_control_mode_.yaw_mode ||
-      this->current_mode_.control_mode != desired_control_mode_.control_mode ||
-      this->current_mode_.reference_frame != desired_control_mode_.reference_frame) {
+      this->current_mode_.control_mode != desired_control_mode_.control_mode) {
     if (!setMode(desired_control_mode_)) {
       return false;
     }

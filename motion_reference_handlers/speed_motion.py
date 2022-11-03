@@ -1,29 +1,41 @@
-from motion_reference_handlers.basic_motion_references import BasicMotionReferenceHandler
-import motion_reference_handlers.utils as utils
+"""
+Implementation of a motion reference handler for speed motion.
+"""
+
+from typing import Union
+from rclpy.node import Node
 from as2_msgs.msg import ControlMode
 from geometry_msgs.msg import PoseStamped, TwistStamped
+from motion_reference_handlers import utils
+from motion_reference_handlers.basic_motion_references import BasicMotionReferenceHandler
 
 
 class SpeedMotion(BasicMotionReferenceHandler):
-    def __init__(self, node):
+    """ Send speed motion command """
+
+    def __init__(self, node: Node):
         super().__init__(node)
         self.desired_control_mode_.yaw_mode = ControlMode.NONE
         self.desired_control_mode_.control_mode = ControlMode.SPEED
-        self.desired_control_mode_.reference_frame = ControlMode.LOCAL_ENU_FRAME
+        self.desired_control_mode_.reference_frame = ControlMode.UNDEFINED_FRAME
 
-    def __own_send_command(self, yaw_mode, twist_mgs, pose_msg=None):
+    def __own_send_command(self, yaw_mode: int, twist_mgs: TwistStamped,
+                           pose_msg: Union[PoseStamped, None] = None) -> bool:
+        """ Send speed command """
         self.desired_control_mode_.yaw_mode = yaw_mode
 
         send_pose = True
-        if pose_msg != None:
+        if pose_msg is not None:
             self.command_pose_msg_ = pose_msg
-            send_pose = self.sendPoseCommand()
+            send_pose = self.send_pose_command()
 
         self.command_twist_msg_ = twist_mgs
-        send_twist = self.sendTwistCommand()
+        send_twist = self.send_twist_command()
         return send_pose and send_twist
 
-    def __check_input_twist(self, twist, twist_frame_id):
+    def __check_input_twist(self, twist: Union[TwistStamped, list],
+                            twist_frame_id: str) -> Union[TwistStamped, None]:
+        """ Check if the input twist is valid and return a TwistStamped message """
         twist_mgs = TwistStamped()
 
         if isinstance(twist, list):
@@ -43,10 +55,16 @@ class SpeedMotion(BasicMotionReferenceHandler):
 
         return twist_mgs
 
-    def send_speed_command_with_yaw_angle(self, twist, pose=None, twist_frame_id='', yaw_angle=None, pose_frame_id='earth',):
+    def send_speed_command_with_yaw_angle(self, twist: Union[TwistStamped, list],
+                                          pose: Union[PoseStamped,
+                                                      None] = None,
+                                          twist_frame_id: str = '',
+                                          yaw_angle: Union[float, None] = None,
+                                          pose_frame_id: str = 'earth') -> bool:
+        """ Send speed command with yaw angle """
         twist_msg = self.__check_input_twist(twist, twist_frame_id)
 
-        if twist_msg == None:
+        if twist_msg is None:
             return False
 
         pose_msg = PoseStamped()
@@ -63,10 +81,13 @@ class SpeedMotion(BasicMotionReferenceHandler):
 
         return self.__own_send_command(ControlMode.YAW_ANGLE, twist_msg, pose_msg)
 
-    def send_speed_command_with_yaw_speed(self, twist, twist_frame_id='', yaw_speed=None):
+    def send_speed_command_with_yaw_speed(self, twist: Union[TwistStamped, list],
+                                          twist_frame_id: str = '',
+                                          yaw_speed: Union[float, None] = None) -> bool:
+        """ Send speed command with yaw speed """
         twist_msg = self.__check_input_twist(twist, twist_frame_id)
 
-        if twist_msg == None:
+        if twist_msg is None:
             return False
 
         if isinstance(twist, list):

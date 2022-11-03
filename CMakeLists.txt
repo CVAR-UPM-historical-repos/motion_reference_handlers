@@ -45,6 +45,7 @@ set(SOURCE_CPP_FILES
   src/trajectory_motion.cpp
   src/position_motion.cpp
   src/speed_motion.cpp
+  src/speed_in_a_plane_motion.cpp
   )
 
 add_library(${PROJECT_NAME} ${SOURCE_CPP_FILES})
