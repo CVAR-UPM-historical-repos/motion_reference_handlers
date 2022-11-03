@@ -2,7 +2,7 @@
 Implementation of a motion reference handler for speed motion.
 """
 
-import rclpy
+from rclpy.node import Node
 from as2_msgs.msg import ControlMode
 from motion_reference_handlers.basic_motion_references import BasicMotionReferenceHandler
 
@@ -10,7 +10,7 @@ from motion_reference_handlers.basic_motion_references import BasicMotionReferen
 class HoverMotion(BasicMotionReferenceHandler):
     """ Send hover motion command """
 
-    def __init__(self, node: rclpy.Node):
+    def __init__(self, node: Node):
         super().__init__(node)
         self.desired_control_mode_.yaw_mode = ControlMode.NONE
         self.desired_control_mode_.control_mode = ControlMode.HOVER

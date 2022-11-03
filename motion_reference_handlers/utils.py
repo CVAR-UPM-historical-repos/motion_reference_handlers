@@ -2,7 +2,8 @@
 Collection of utility functions for working with motion references.
 """
 
-import rclpy
+from rclpy.node import Node
+from rclpy import logging
 from geometry_msgs.msg import Quaternion
 from scipy.spatial.transform import Rotation
 
@@ -23,7 +24,7 @@ def generate_tf_name(namespace: str, frame_name: str):
     if frame_name[0] == '/':
         return frame_name[1:]
     if len(namespace) == 0:
-        rclpy.logging.get_logger("tf_utils").warn(
+        logging.get_logger("tf_utils").warn(
             "The frame name [%s] is not absolute and the node namespace is empty. This could "
             "lead to conflicts.", frame_name)
         return frame_name
@@ -36,6 +37,6 @@ def generate_tf_name(namespace: str, frame_name: str):
     return frame_name
 
 
-def get_tf_name(node: rclpy.Node, frame_name: str):
+def get_tf_name(node: Node, frame_name: str):
     """ Get tf name """
     return generate_tf_name(node.get_namespace(), frame_name)

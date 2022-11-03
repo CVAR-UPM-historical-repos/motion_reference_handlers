@@ -3,7 +3,7 @@ Implementation of a motion reference handler base.
 """
 
 import copy
-import rclpy
+from rclpy.node import Node
 from rclpy.qos import qos_profile_sensor_data, qos_profile_system_default
 from as2_msgs.msg import ControlMode, ControllerInfo
 from as2_msgs.srv import SetControlMode
@@ -41,7 +41,7 @@ class BasicMotionReferencesBase(metaclass=Singleton):
     command_pose_pub_ = None
     command_twist_pub_ = None
 
-    def __init__(self, node: rclpy.Node):
+    def __init__(self, node: Node):
         self.number_of_instances_ += 1
 
         if self.number_of_instances_ == 0:
@@ -73,7 +73,7 @@ class BasicMotionReferencesBase(metaclass=Singleton):
 class BasicMotionReferenceHandler():
     """ Implementation of a motion reference handler base """
 
-    def __init__(self, node: rclpy.Node):
+    def __init__(self, node: Node):
         self.motion_handler_ = BasicMotionReferencesBase(node)
 
         self.node = node
