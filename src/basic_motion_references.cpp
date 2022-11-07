@@ -56,7 +56,7 @@ BasicMotionReferenceHandler::BasicMotionReferenceHandler(as2::Node *as2_ptr) : n
     controller_info_sub_ = node_ptr_->create_subscription<as2_msgs::msg::ControllerInfo>(
         as2_names::topics::controller::info, rclcpp::QoS(1),
         [](const as2_msgs::msg::ControllerInfo::SharedPtr msg) {
-          current_mode_ = msg->current_control_mode;
+          current_mode_ = msg->input_control_mode;
         });
 
     // Set initial control mode

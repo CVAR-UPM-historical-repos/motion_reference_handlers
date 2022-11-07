@@ -36,7 +36,7 @@ class BasicMotionReferencesBase(metaclass=Singleton):
     """ Implementation of a motion reference handler base for singletons """
     number_of_instances_ = -1
     current_mode_ = ControlMode()
-    controller_info_sub_ = ControllerInfo()
+    controller_info_sub_ = None
     command_traj_pub_ = None
     command_pose_pub_ = None
     command_twist_pub_ = None
@@ -66,7 +66,7 @@ class BasicMotionReferencesBase(metaclass=Singleton):
 
     def controller_info_callback(self, msg: ControllerInfo):
         """ Callback for controller info """
-        self.controller_info_sub_ = msg
+        self.current_mode_ = msg.input_control_mode
         return
 
 
