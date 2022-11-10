@@ -2,8 +2,8 @@
 Implementation of a motion reference handler base.
 """
 
-import copy
-from rclpy.node import Node
+import time
+from rclpy.node import Node, MutuallyExclusiveCallbackGroup
 from rclpy.qos import qos_profile_sensor_data, qos_profile_system_default
 from as2_msgs.msg import ControlMode, ControllerInfo
 from as2_msgs.srv import SetControlMode
@@ -45,9 +45,10 @@ class BasicMotionReferencesBase(metaclass=Singleton):
         self.number_of_instances_ += 1
 
         if self.number_of_instances_ == 0:
+            my_callback_group = MutuallyExclusiveCallbackGroup()
             self.controller_info_sub_ = node.create_subscription(
                 ControllerInfo, as2_names_topic_controller_info,
-                self.controller_info_callback, as2_names_topic_controller_qos)
+                self.controller_info_callback, as2_names_topic_controller_qos, callback_group=my_callback_group)
 
             self.command_pose_pub_ = node.create_publisher(
                 PoseStamped, as2_names_topic_motion_reference_pose,
@@ -61,8 +62,8 @@ class BasicMotionReferencesBase(metaclass=Singleton):
                 JointTrajectoryPoint, as2_names_topic_motion_reference_trajectory,
                 as2_names_topic_motion_reference_qos)
 
-        node.get_logger().info('There are %d instances of BasicMotionReferenceHandler created' %
-                               (self.number_of_instances_))
+        node.get_logger().debug(
+            f'#{self.number_of_instances_} instances of BasicMotionReferenceHandler created')
 
     def controller_info_callback(self, msg: ControllerInfo):
         """ Callback for controller info """
@@ -87,8 +88,11 @@ class BasicMotionReferenceHandler():
 
     def check_mode(self) -> bool:
         """ Check if the current mode is the desired mode """
+        if (self.desired_control_mode_.control_mode ==
+                self.motion_handler_.current_mode_.control_mode) == ControlMode.HOVER:
+            return True
         if (self.desired_control_mode_.yaw_mode != self.motion_handler_.current_mode_.yaw_mode or
-            self.desired_control_mode_.control_mode != self.motion_handler_.current_mode_.control_mode):
+                self.desired_control_mode_.control_mode != self.motion_handler_.current_mode_.control_mode):
             if not self.set_mode(self.desired_control_mode_):
                 return False
         return True
@@ -133,7 +137,13 @@ class BasicMotionReferenceHandler():
         req.control_mode = mode
         resp = set_control_mode_cli_.call(req)
         if resp.success:
-            self.motion_handler_.current_mode_ = copy.deepcopy(mode)
+            init_time = self.node.get_clock().now()
+            while self.motion_handler_.current_mode_.control_mode != mode.control_mode:
+                if (self.node.get_clock().now() - init_time).nanoseconds > 5e9:
+                    self.node.get_logger().error(
+                        f"Timeout waiting for mode {mode.control_mode}")
+                    return False
+                time.sleep(0.1)
             self.node.get_logger().debug("Set control mode success")
             return True
 
