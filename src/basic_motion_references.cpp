@@ -53,16 +53,11 @@ BasicMotionReferenceHandler::BasicMotionReferenceHandler(as2::Node *as2_ptr) : n
         as2_names::topics::motion_reference::twist, as2_names::topics::motion_reference::qos);
 
     // Subscriber
-    auto callback_group =
-        node_ptr_->create_callback_group(rclcpp::CallbackGroupType::MutuallyExclusive);
-    rclcpp::SubscriptionOptions options;
-    options.callback_group = callback_group;
-    controller_info_sub_   = node_ptr_->create_subscription<as2_msgs::msg::ControllerInfo>(
+    controller_info_sub_ = node_ptr_->create_subscription<as2_msgs::msg::ControllerInfo>(
         as2_names::topics::controller::info, rclcpp::QoS(1),
         [](const as2_msgs::msg::ControllerInfo::SharedPtr msg) {
           current_mode_ = msg->input_control_mode;
-        },
-        options);
+        });
 
     // Set initial control mode
     desired_control_mode_.yaw_mode        = as2_msgs::msg::ControlMode::NONE;
@@ -143,16 +138,9 @@ bool BasicMotionReferenceHandler::setMode(const as2_msgs::msg::ControlMode &mode
   bool out = set_mode_cli.sendRequest(request, response);
 
   if (out && response.success) {
-    // this->current_mode_ = mode;
-    rclcpp::Time init_time = node_ptr_->now();
-    while (this->current_mode_.control_mode != mode.control_mode) {
-      if ((node_ptr_->now() - init_time).seconds() > 5.0) {
-        RCLCPP_ERROR(node_ptr_->get_logger(), "Timeout while waiting for control mode %s to be set",
-                     as2::control_mode::controlModeToString(mode).c_str());
-        return false;
-      }
-      std::this_thread::sleep_for(std::chrono::milliseconds(100));
-    }
+    this->current_mode_ = mode;
+    // Sleep for controller info callback to update
+    std::this_thread::sleep_for(std::chrono::milliseconds(100));
     return true;
   }
   RCLCPP_ERROR(node_ptr_->get_logger(),
