@@ -137,9 +137,12 @@ class BasicMotionReferenceHandler():
         req.control_mode = mode
         resp = set_control_mode_cli_.call(req)
         if resp.success:
+            init_time = self.node.get_clock().now()
             while self.motion_handler_.current_mode_.control_mode != mode.control_mode:
-                self.node.get_logger().debug(
-                    "Set mode callback: waiting for control mode change confirmation")
+                if (self.node.get_clock().now() - init_time).nanoseconds > 5e9:
+                    self.node.get_logger().error(
+                        f"Timeout waiting for mode {mode.control_mode}")
+                    return False
                 time.sleep(0.1)
             self.node.get_logger().debug("Set control mode success")
             return True
