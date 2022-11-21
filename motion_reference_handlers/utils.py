@@ -11,7 +11,7 @@ from scipy.spatial.transform import Rotation
 def get_quaternion_from_yaw_angle(yaw_angle: float):
     """ Get quaternion from yaw angle """
     rot = Rotation.from_euler(
-        'xyz', [0.0, 0.0, yaw_angle], degrees=True)
+        'xyz', [0.0, 0.0, yaw_angle], degrees=False)
     rot_quat = rot.as_quat()
     return Quaternion(
         x=rot_quat[0], y=rot_quat[1], z=rot_quat[2], w=rot_quat[3])
