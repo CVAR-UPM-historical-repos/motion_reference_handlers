@@ -37,13 +37,6 @@
 #ifndef TRAJECTORY_MOTION_COMMANDS_HPP
 #define TRAJECTORY_MOTION_COMMANDS_HPP
 
-#include <functional>
-#include <geometry_msgs/msg/pose_stamped.hpp>
-#include <geometry_msgs/msg/twist_stamped.hpp>
-#include <memory>
-#include <thread>
-#include <vector>
-
 #include "as2_core/node.hpp"
 #include "basic_motion_references.hpp"
 

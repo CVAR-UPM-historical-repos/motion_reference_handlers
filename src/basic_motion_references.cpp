@@ -36,14 +36,12 @@
 
 #include "motion_reference_handlers/basic_motion_references.hpp"
 
-#include <as2_core/names/topics.hpp>
-
 namespace as2 {
 namespace motionReferenceHandlers {
 BasicMotionReferenceHandler::BasicMotionReferenceHandler(as2::Node *as2_ptr) : node_ptr_(as2_ptr) {
   if (number_of_instances_ == 0) {
     // Publisher
-    command_traj_pub_ = node_ptr_->create_publisher<trajectory_msgs::msg::JointTrajectoryPoint>(
+    command_traj_pub_ = node_ptr_->create_publisher<as2_msgs::msg::TrajectoryPoint>(
         as2_names::topics::motion_reference::trajectory, as2_names::topics::motion_reference::qos);
 
     command_pose_pub_ = node_ptr_->create_publisher<geometry_msgs::msg::PoseStamped>(
@@ -156,7 +154,7 @@ rclcpp::Subscription<as2_msgs::msg::ControllerInfo>::SharedPtr
 as2_msgs::msg::ControlMode BasicMotionReferenceHandler::current_mode_ =
     as2_msgs::msg::ControlMode();
 
-rclcpp::Publisher<trajectory_msgs::msg::JointTrajectoryPoint>::SharedPtr
+rclcpp::Publisher<as2_msgs::msg::TrajectoryPoint>::SharedPtr
     BasicMotionReferenceHandler::command_traj_pub_ = nullptr;
 rclcpp::Publisher<geometry_msgs::msg::PoseStamped>::SharedPtr
     BasicMotionReferenceHandler::command_pose_pub_ = nullptr;
